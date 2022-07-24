@@ -10,9 +10,6 @@ ListNode node4 = new ListNode(2, node3);
 ListNode node5 = new ListNode(1);
 
 ReverseEngineering engine = new ReverseEngineering();
+Console.WriteLine(int.MinValue);
 
-
-
-IList<string> result = engine.GenerateParenthesis(3);
-
-foreach (var i in result) Console.WriteLine(i);
+Console.WriteLine("answer " + engine.Divide(103892580, int.MinValue));

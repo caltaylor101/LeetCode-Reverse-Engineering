@@ -18,6 +18,165 @@ namespace LeetCode_Reverse_Engineering
     }
     internal class ReverseEngineering
     {
+
+        private static int HALF_INT_MIN = -1073741824;
+        public int Divide2(int dividend, int divisor)
+        {
+            // Special case: overflow.
+            if (dividend == int.MinValue && divisor == -1)
+            {
+                return int.MaxValue;
+            }
+
+            /* We need to convert both numbers to negatives
+             * for the reasons explained above.
+             * Also, we count the number of negatives signs. */
+            int negatives = 2;
+            if (dividend > 0)
+            {
+                negatives--;
+                dividend = -dividend;
+            }
+            if (divisor > 0)
+            {
+                negatives--;
+                divisor = -divisor;
+            }
+
+            /*****************Approach 1 *********************/
+            /* Count how many times the divisor has to be added
+             * to get the dividend. This is the quotient. */
+            //int quotient = 0;
+            //while (dividend - divisor <= 0) {
+            //    quotient--;
+            //    dividend -= divisor;
+            //}
+
+            /* If there was originally one negative sign, then
+             * the quotient remains negative. Otherwise, switch
+             * it to positive. */
+            //if (negatives != 1) {
+            //    quotient = -quotient;
+            //}
+            //return quotient;
+
+            /*****************Approach 2 *********************/
+            int quotient = 0;
+            /* Once the divisor is bigger than the current dividend,
+             * we can't fit any more copies of the divisor into it. */
+            while (divisor >= dividend)
+            {
+                /* We know it'll fit at least once as divivend >= divisor.
+                 * Note: We use a negative powerOfTwo as it's possible we might have
+                 * the case divide(INT_MIN, -1). */
+                int powerOfTwo = -1;
+                int value = divisor;
+                /* Check if double the current value is too big. If not, continue doubling.
+                 * If it is too big, stop doubling and continue with the next step */
+                while (value >= HALF_INT_MIN && value + value >= dividend)
+                {
+                    value += value;
+                    powerOfTwo += powerOfTwo;
+                }
+                // We have been able to subtract divisor another powerOfTwo times.
+                quotient += powerOfTwo;
+                // Remove value so far so that we can continue the process with remainder.
+                dividend -= value;
+            }
+
+            /* If there was originally one negative sign, then
+             * the quotient remains negative. Otherwise, switch
+             * it to positive. */
+            if (negatives != 1)
+            {
+                return -quotient;
+            }
+            return quotient;
+        }
+        public int Divide(int dividend, int divisor)
+        {
+            bool isPositive = false;
+            int counter = 0;
+
+            if (dividend == divisor) return 1;
+
+            if (divisor == 1) return dividend;
+
+            if (dividend == 0) return 0;
+
+            if (divisor < 0 && dividend < 0 && divisor < dividend) return 0;
+            if (divisor > 0 && dividend > 0 && divisor > dividend) return 0;
+            if (divisor < 0 && dividend > 0 && -divisor > dividend) return 0;
+            if (divisor > 0 && dividend < 0 && divisor > -dividend && dividend != int.MinValue) return 0;
+
+            if (dividend == Int32.MinValue && divisor == -1)
+            {
+                return Int32.MaxValue;
+            }
+
+            if (dividend > 0 && divisor== int.MinValue && dividend != int.MaxValue) return 0;
+
+            if ((divisor > 0 && dividend > 0) || (divisor < 0 && dividend < 0))
+            {
+                isPositive = true;
+            }
+
+            if (divisor < 0)
+            {
+                var tmpDivisor = divisor;
+                divisor -= tmpDivisor;
+                divisor -= tmpDivisor;
+            }
+
+            if (dividend < 0 && dividend != int.MinValue)
+            {
+                var tmpDividend = dividend;
+                dividend -= tmpDividend;
+                dividend -= tmpDividend;
+            }
+
+            if (dividend == int.MinValue)
+            {
+                dividend = int.MaxValue;
+                dividend -= divisor;
+                counter++;
+                dividend++;
+            }
+
+
+
+
+            while (dividend > divisor + divisor)
+            {
+                int secondDivisor = divisor;
+                int secondCounter = 1;
+                while (secondDivisor + secondDivisor < 1073741823 && secondDivisor + secondDivisor < dividend)
+                {
+                    secondDivisor += secondDivisor;
+                    secondCounter += secondCounter;
+                }
+                
+
+                dividend -= secondDivisor;
+                counter += secondCounter;
+            }
+
+            while (dividend >= divisor)
+            {
+                dividend -= divisor;
+                counter++;
+            }
+
+            if (!isPositive)
+            {
+                var tmpCounter = counter;
+                counter -= tmpCounter;
+                counter -= tmpCounter;
+            }
+
+            return counter; 
+        }
+
         //This list is added as private outside both functions so both may access it.
         private IList<string> result = new List<string>();
 
