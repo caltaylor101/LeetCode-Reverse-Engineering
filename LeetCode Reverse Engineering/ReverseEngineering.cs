@@ -19,6 +19,94 @@ namespace LeetCode_Reverse_Engineering
     internal class ReverseEngineering
     {
 
+        public int Search(int[] nums, int target)
+        {
+
+            
+            int left = 0;
+            int right = nums.Length - 1;
+            int mid = left + right / 2;
+
+            if (nums.Length == 1 && nums[0] != target) return -1;
+            else if (nums.Length == 1 && nums[0] == target) return 0;
+
+            while (left < right)
+            {
+                if (nums[left] == target) return left;
+                if (nums[right] == target) return right;
+                if (target == nums[mid]) return mid;
+
+                // if our left is less than mid, we still need to check to make sure the array isn't split.
+                if (nums[left] <= nums[mid])
+                {
+                    // if left < target and target < mid, then we change our right value because we know target must be somewhere in here.
+                   if (nums[left] <= target && target <= nums[mid])
+                    {
+                        right = mid - 1;
+                    }
+                   // otherwise we change out left value to find target on the right side.The array was probably split. 
+                   else
+                    {
+                        left = mid + 1;
+                    }
+                }
+                else
+                {
+                    if (nums[right] >= target && target >= nums[mid])
+                    {
+                        left = mid + 1;
+                    }
+                    else
+                        right = mid - 1;
+                }
+
+            }
+
+            return -1; 
+        }
+
+
+            
+
+        public int Search3(int[] nums, int target)
+        {
+            int left = 0;
+            int right = nums.Length - 1;
+
+            while (left <= right)
+            {
+                int mid = (left + right) / 2;
+                if (nums[mid] == target)
+                {
+                    return mid;
+                }
+                else if (nums[left] <= nums[mid])
+                {
+                    if (nums[left] <= target && target <= nums[mid])
+                    {
+                        right = mid - 1;
+                    }
+                    else
+                    {
+                        left = mid + 1;
+                    }
+                }
+                else
+                {
+                    if (nums[mid] <= target && target <= nums[right])
+                    {
+                        left = mid + 1;
+                    }
+                    else
+                    {
+                        right = mid - 1;
+                    }
+                }
+            }
+            return -1;
+        }
+
+
         private static int HALF_INT_MIN = -1073741824;
         public int Divide2(int dividend, int divisor)
         {
