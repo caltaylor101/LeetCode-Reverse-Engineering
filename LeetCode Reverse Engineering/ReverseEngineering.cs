@@ -21,48 +21,73 @@ namespace LeetCode_Reverse_Engineering
 
         public int Search(int[] nums, int target)
         {
-
-            
+            int endIndex = nums.Length - 1;
             int left = 0;
-            int right = nums.Length - 1;
-            int mid = left + right / 2;
+            int right = endIndex;
+            int mid = (left + right) / 2;
 
-            if (nums.Length == 1 && nums[0] != target) return -1;
-            else if (nums.Length == 1 && nums[0] == target) return 0;
-
-            while (left < right)
+            if (nums[0] == target) return 0;
+            if (nums.Length == 1)
             {
-                if (nums[left] == target) return left;
-                if (nums[right] == target) return right;
-                if (target == nums[mid]) return mid;
-
-                // if our left is less than mid, we still need to check to make sure the array isn't split.
-                if (nums[left] <= nums[mid])
+                return (nums[0] == target) ? nums[0] : -1;
+            }
+            if (nums[right] == target) return right;
+            
+            if (nums[left] < nums[right])
+            {
+                int returnIndex = BinarySearch(nums,0, endIndex, target);
+                return (returnIndex < 0) ? -1 : returnIndex;
+            }
+            else
+            {
+                while (left <= right)
                 {
-                    // if left < target and target < mid, then we change our right value because we know target must be somewhere in here.
-                   if (nums[left] <= target && target <= nums[mid])
+                    mid = (left + right) / 2;
+                    if (nums[mid] < nums[left])
                     {
-                        right = mid - 1;
+                        right = mid;
                     }
-                   // otherwise we change out left value to find target on the right side.The array was probably split. 
-                   else
+                    else if (nums[mid] > nums[left])
                     {
-                        left = mid + 1;
+                        left = mid;
                     }
+                    else
+                    {
+                        left++;
+                    }
+                }
+            }
+            
+            int firstEnd = mid - 1;
+            if (nums[firstEnd] == target) return firstEnd;
+            int test = BinarySearch(nums, 0, firstEnd, target);
+            if (test >= 0) return test;
+            int test2 = BinarySearch(nums, mid, endIndex - mid, target);
+            if (test < 0 && test2 < 0) return -1;
+            return Math.Max(test, test2);
+        }
+
+        public int BinarySearch(int[] nums, int startIndex, int endIndex, int target)
+        {
+            int left = startIndex;
+            int right = endIndex + startIndex;
+
+
+            while (left <= right)
+            {
+                int mid = (left + right) / 2;
+                if (nums[mid] == target) return mid;
+                else if (target > nums[mid])
+                {
+                    left = mid + 1;
                 }
                 else
                 {
-                    if (nums[right] >= target && target >= nums[mid])
-                    {
-                        left = mid + 1;
-                    }
-                    else
-                        right = mid - 1;
+                    right = mid - 1;
                 }
-
             }
 
-            return -1; 
+            return -1;
         }
 
 
