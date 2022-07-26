@@ -25,53 +25,58 @@ namespace LeetCode_Reverse_Engineering
             int left = 0;
             int right = endIndex;
             int mid = (left + right) / 2;
+            int middleDivider = -1;
 
-            if (nums[0] == target) return 0;
-            if (nums.Length == 1)
-            {
-                return (nums[0] == target) ? nums[0] : -1;
-            }
-            if (nums[right] == target) return right;
-            
+            //Takes care of any single arrays.
+            if (nums.Length == 1) return (nums[0] == target) ? 0 : -1;
+            //If the first number is less than the last number, that means the array couldn't have been rotated. 
+            //We can just binary search this.
             if (nums[left] < nums[right])
             {
-                int returnIndex = BinarySearch(nums,0, endIndex, target);
-                return (returnIndex < 0) ? -1 : returnIndex;
+                return BinarySearch(nums, 0, endIndex, target);
             }
+            //Otherwise I created a method to find the middle index, which is really just a slightly modified binary search.
             else
             {
-                while (left <= right)
+                middleDivider = GetMiddleIndex(nums, left, right, mid);
+            }
+
+            //Search the first half
+            int firstSearch = BinarySearch(nums, 0, middleDivider, target);
+            if (firstSearch >= 0) return firstSearch;
+            //Search the second half and return it.
+            //Middle divider is increased to search the second half of the array. 
+            return BinarySearch(nums, middleDivider + 1, endIndex, target);
+        }
+        //Since we checked up above and know that the array has been rotated, we can focus on finding the left side with a simple binary search
+        private int GetMiddleIndex(int[] nums, int left, int right, int mid)
+        {
+            //Basic search where the main difference is that we increased the left and right to end the function and give us the exact midpoint.
+            while (left <= right)
+            {
+                mid = (left + right) / 2;
+                if (nums[left] > nums[mid])
                 {
-                    mid = (left + right) / 2;
-                    if (nums[mid] < nums[left])
-                    {
-                        right = mid;
-                    }
-                    else if (nums[mid] > nums[left])
-                    {
-                        left = mid;
-                    }
-                    else
-                    {
-                        left++;
-                    }
+                    right = mid;
+                }
+                else if (nums[left] < nums[mid])
+                {
+                    left = mid;
+                }
+                else
+                {
+                    left++;
+                    right--;
                 }
             }
-            
-            int firstEnd = mid - 1;
-            if (nums[firstEnd] == target) return firstEnd;
-            int test = BinarySearch(nums, 0, firstEnd, target);
-            if (test >= 0) return test;
-            int test2 = BinarySearch(nums, mid, endIndex - mid, target);
-            if (test < 0 && test2 < 0) return -1;
-            return Math.Max(test, test2);
-        }
 
+            return mid;
+        }
+        //Basic binary search.
         public int BinarySearch(int[] nums, int startIndex, int endIndex, int target)
         {
             int left = startIndex;
-            int right = endIndex + startIndex;
-
+            int right = endIndex;
 
             while (left <= right)
             {
@@ -91,7 +96,7 @@ namespace LeetCode_Reverse_Engineering
         }
 
 
-            
+
 
         public int Search3(int[] nums, int target)
         {
@@ -227,7 +232,7 @@ namespace LeetCode_Reverse_Engineering
                 return Int32.MaxValue;
             }
 
-            if (dividend > 0 && divisor== int.MinValue && dividend != int.MaxValue) return 0;
+            if (dividend > 0 && divisor == int.MinValue && dividend != int.MaxValue) return 0;
 
             if ((divisor > 0 && dividend > 0) || (divisor < 0 && dividend < 0))
             {
@@ -268,7 +273,7 @@ namespace LeetCode_Reverse_Engineering
                     secondDivisor += secondDivisor;
                     secondCounter += secondCounter;
                 }
-                
+
 
                 dividend -= secondDivisor;
                 counter += secondCounter;
@@ -287,7 +292,7 @@ namespace LeetCode_Reverse_Engineering
                 counter -= tmpCounter;
             }
 
-            return counter; 
+            return counter;
         }
 
         //This list is added as private outside both functions so both may access it.
@@ -307,7 +312,7 @@ namespace LeetCode_Reverse_Engineering
             {
                 //Step4: Add the string to the result list.
                 result.Add(para.ToString());
-            }    
+            }
             //Step5: We want this tail function to end once it's added to the string list.
             //We add this else function so that the function ends now that there are no left or right parenthesis left. 
             //Now we must traverse back up through our functions.
@@ -338,7 +343,7 @@ namespace LeetCode_Reverse_Engineering
                     {
                         //Step3: We got all of our left parenthesis, so now we need to get all of the right parenthesis.
                         para.Append(")");
-                        BuildParenthesis(para, leftPara, rightPara-1);
+                        BuildParenthesis(para, leftPara, rightPara - 1);
                         //Step6: We remove the last one added so the function 1 level up can figure out what to do.
                         //This function ends.
                         para.Remove(para.Length - 1, 1);
@@ -410,7 +415,7 @@ namespace LeetCode_Reverse_Engineering
             parentheses1.Clear();
             parentheses2.Clear();
 
-            for (int i = 0; i < halfParentheses1.Length; i ++)
+            for (int i = 0; i < halfParentheses1.Length; i++)
             {
                 for (int j = 0; j < halfParentheses2.Length; j++)
                 {
