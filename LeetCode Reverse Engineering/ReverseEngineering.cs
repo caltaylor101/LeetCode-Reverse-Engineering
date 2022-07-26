@@ -18,6 +18,39 @@ namespace LeetCode_Reverse_Engineering
     }
     internal class ReverseEngineering
     {
+        private List<IList<int>> result = new List<IList<int>>();
+        public IList<IList<int>> Permute(int[] nums)
+        {
+            int numsLength = nums.Length;
+            NumsDFS(nums, numsLength, new bool[numsLength], new List<int>());
+
+            return result;
+        }
+
+        private void NumsDFS(int[] nums, int numsLength, bool[] isVisited, List<int> permutation )
+        {
+            if (permutation.Count == numsLength)
+            {
+                result.Add(new List<int>(permutation));
+            }
+            else
+            {
+                //step 1 traverse down
+                for (int i = 0; i < numsLength; i++)
+                {
+                    //if we have used this number, continue the loop.
+                    if (isVisited[i]) continue;
+                    //Add each value and mark it visited.
+                    permutation.Add(nums[i]);
+                    isVisited[i] = true;
+                    NumsDFS(nums, numsLength, isVisited, permutation);
+                    isVisited[i] = false;
+                    permutation.RemoveAt(permutation.Count - 1);
+                }
+            }
+        }
+
+
 
         public int Search(int[] nums, int target)
         {
@@ -296,14 +329,14 @@ namespace LeetCode_Reverse_Engineering
         }
 
         //This list is added as private outside both functions so both may access it.
-        private IList<string> result = new List<string>();
+        private IList<string> resultList = new List<string>();
 
         public IList<string> GenerateParenthesis(int n)
         {
             //Call the recurse function
             BuildParenthesis(new StringBuilder(), n, n);
 
-            return result;
+            return resultList;
         }
 
         public void BuildParenthesis(StringBuilder para, int leftPara, int rightPara)
@@ -311,7 +344,7 @@ namespace LeetCode_Reverse_Engineering
             if (rightPara == 0)
             {
                 //Step4: Add the string to the result list.
-                result.Add(para.ToString());
+                resultList.Add(para.ToString());
             }
             //Step5: We want this tail function to end once it's added to the string list.
             //We add this else function so that the function ends now that there are no left or right parenthesis left. 
