@@ -44,7 +44,65 @@ namespace LeetCode_Reverse_Engineering
 
     internal class ReverseEngineering
     {
-        public int SingleNumber(int[] nums)
+
+
+        public int MajorityElement(int[] nums)
+        {
+            if (nums.Length == 1) return nums[0];
+            Array.Sort(nums);
+            int currentVal = nums[0];
+            int counter = 1;
+
+            int maxVal = currentVal;
+            int maxOccurence = 1;
+
+            for (int i = 1; i  < nums.Length; i++)
+            {
+                if (nums[i] == currentVal)
+                {
+                    counter++;
+                }
+                else
+                {
+                    if (counter > maxOccurence)
+                    {
+                        maxVal = currentVal;
+                        maxOccurence = counter;
+                    }
+                    currentVal = nums[i];
+                    counter = 1;
+                }
+            }
+            if (counter > maxOccurence)
+            {
+                maxVal = currentVal;
+                maxOccurence = counter;
+            }
+
+
+            return maxVal;
+        }
+
+
+
+
+        public int SingleNumber3(int[] nums)
+        {
+            var singleNumber = 0;
+
+            foreach (var num in nums)
+            {
+                singleNumber ^= num;
+            }
+
+            return singleNumber;
+        }
+
+
+
+
+
+        public int SingleNumber2(int[] nums)
         {
             Array.Sort(nums);
             int result = 0;

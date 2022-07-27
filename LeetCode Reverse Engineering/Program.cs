@@ -19,8 +19,13 @@ int[] testNums = new int[] { 1,2,3 };
 // mid = 3, left = 11, right 10
 //Console.WriteLine(Array.BinarySearch(testNums, 3, testNums.Length - 3, 10));
 
-int[] list = new int[] { 0,0, 1, 1, 2, 2,3,3, 10,10,15 };
+int[] list = new int[] { 4,4,4,4,1,2,1,2,2 };
 
-Console.WriteLine(engine.SingleNumber(list));
+Console.WriteLine(engine.MajorityElement(list));
+
+
+
+
+
 
 
