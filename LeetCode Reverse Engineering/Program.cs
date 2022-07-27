@@ -18,16 +18,9 @@ int[] testNums = new int[] { 1,2,3 };
 //int[] testNums = new int[] { 1,3 };
 // mid = 3, left = 11, right 10
 //Console.WriteLine(Array.BinarySearch(testNums, 3, testNums.Length - 3, 10));
-IList<IList<int>> results = engine.Permute(new int[] { 0, 1, 2, 3, 4 });
-var counter = 0;
-foreach (var i in results)
-{
-    Console.WriteLine();
-    foreach (var k in i)
-    {
-        Console.WriteLine(k);
-    }
-    counter++;
-}
 
-Console.WriteLine("final count is {0}",counter);
+int[] list = new int[] { 0,0, 1, 1, 2, 2,3,3, 10,10,15 };
+
+Console.WriteLine(engine.SingleNumber(list));
+
+

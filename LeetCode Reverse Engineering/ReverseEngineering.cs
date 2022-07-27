@@ -16,22 +16,155 @@ namespace LeetCode_Reverse_Engineering
             this.next = next;
         }
     }
+
+    public class Node
+    {
+        public int val;
+        public IList<Node> neighbors;
+
+        public Node()
+        {
+            val = 0;
+            neighbors = new List<Node>();
+        }
+
+        public Node(int _val)
+        {
+            val = _val;
+            neighbors = new List<Node>();
+        }
+
+        public Node(int _val, List<Node> _neighbors)
+        {
+            val = _val;
+            neighbors = _neighbors;
+        }
+    }
+
+
     internal class ReverseEngineering
     {
+        public int SingleNumber(int[] nums)
+        {
+            Array.Sort(nums);
+            int result = 0;
+            int counter = 2;
+
+            result = nums[0];
+
+            for (int i = 1; i < nums.Length; i++)
+            {
+                if (nums[i] == result)
+                {
+                    counter = 1;
+                }
+                if (nums[i] != result && counter == 1)
+                {
+                    result = nums[i];
+                    counter++;
+                }
+            }
+
+            return result; 
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //A result list both functions can easily access.
         private List<IList<int>> result = new List<IList<int>>();
+        //A permutation list so we don't have to pass the list down to each function
+        private List<int> permutations = new List<int>();
+
         public IList<IList<int>> Permute(int[] nums)
         {
             int numsLength = nums.Length;
-            NumsDFS(nums, numsLength, new bool[numsLength], new List<int>());
+
+            NumsPermutationDFS(nums, numsLength, new bool[numsLength]);
 
             return result;
         }
 
-        private void NumsDFS(int[] nums, int numsLength, bool[] isVisited, List<int> permutation )
+        private void NumsPermutationDFS(int[] nums, int numsLength, bool[] isVisited)
+        {
+            //Step5 create an if condition for when our list needs to be pushed up to our result list.
+            if (permutations.Count == numsLength)
+            {
+                //A new list must be added, otherwise the List object will be stored, and any modification to our list will be modified in our result.
+                result.Add(new List<int>(permutations));
+            }
+
+            //Step6 We want our function to end if it pushed to our result list.
+            else
+            {
+                //Step1 is to create a for loop that will call each function. 
+                //The for loop allows us to backtrack through each possible iteration. 
+
+                for (int i = 0; i < numsLength; i++)
+                {
+                    //Step4 Check to make sure that the index hasn't been visited already. If it has, continue to the next index.
+                    if (isVisited[i]) continue;
+
+                    //Step2 Traverse down as far as possible in the for loop.
+                    permutations.Add(nums[i]);
+                    //Step2 continued Make sure that we are keeping a reference of which indices have been visited.
+                    isVisited[i] = true;
+
+                    //Step3 Call the function to have an instance of each index running.
+                    NumsPermutationDFS(nums, numsLength, isVisited);
+
+                    //Step7 Now we remove the last index and free its visitation.
+                    permutations.RemoveAt(permutations.Count - 1);
+                    isVisited[i] = false;
+                }
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private List<IList<int>> result2 = new List<IList<int>>();
+        public IList<IList<int>> Permute2(int[] nums)
+        {
+            int numsLength = nums.Length;
+            NumsDFS2(nums, numsLength, new bool[numsLength], new List<int>());
+
+            return result2;
+        }
+
+        private void NumsDFS2(int[] nums, int numsLength, bool[] isVisited, List<int> permutation )
         {
             if (permutation.Count == numsLength)
             {
-                result.Add(new List<int>(permutation));
+                result2.Add(new List<int>(permutation));
             }
             else
             {
@@ -43,7 +176,7 @@ namespace LeetCode_Reverse_Engineering
                     //Add each value and mark it visited.
                     permutation.Add(nums[i]);
                     isVisited[i] = true;
-                    NumsDFS(nums, numsLength, isVisited, permutation);
+                    NumsDFS2(nums, numsLength, isVisited, permutation);
                     isVisited[i] = false;
                     permutation.RemoveAt(permutation.Count - 1);
                 }
