@@ -45,8 +45,34 @@ namespace LeetCode_Reverse_Engineering
     internal class ReverseEngineering
     {
 
-
         public int MajorityElement(int[] nums)
+        {
+            Dictionary<int, int> map = new Dictionary<int, int>();
+
+            foreach (var num in nums)
+            {
+                if (!map.TryAdd(num, 1))
+                {
+                    map[num]++;
+                }
+                if (map[num] > (nums.Length / 2)) return num;
+            }
+
+            return 0;
+        }
+
+
+
+        public int MajorityElement3(int[] nums)
+        {
+            Array.Sort(nums);
+            return nums[nums.Length / 2];
+        }
+
+
+
+
+        public int MajorityElemen2(int[] nums)
         {
             if (nums.Length == 1) return nums[0];
             Array.Sort(nums);
@@ -64,6 +90,10 @@ namespace LeetCode_Reverse_Engineering
                 }
                 else
                 {
+                    if (counter > nums.Length / 2)
+                    {
+                        return currentVal;
+                    }
                     if (counter > maxOccurence)
                     {
                         maxVal = currentVal;
@@ -75,7 +105,7 @@ namespace LeetCode_Reverse_Engineering
             }
             if (counter > maxOccurence)
             {
-                maxVal = currentVal;
+                maxVal = nums[nums.Length - 1];
                 maxOccurence = counter;
             }
 
