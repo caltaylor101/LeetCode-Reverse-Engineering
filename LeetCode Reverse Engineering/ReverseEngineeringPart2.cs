@@ -25,7 +25,29 @@ namespace LeetCode_Reverse_Engineering
             if (num > 0) return num == 4 ? "IV" : ("I" + IntToRoman(num - 1));
 
             return "";
+        }
 
+        public int RemoveElement(int[] nums, int val)
+        {
+            if (nums.Length == 0) return 0;
+            int offsetShift = 0;
+            int counter = nums.Length;
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (nums[i] == val)
+                {
+                    offsetShift++;
+                    counter--;
+                }
+                else
+                {
+                    nums[i - offsetShift] = nums[i];
+                }
+                
+            }
+            foreach (var i in nums) Console.WriteLine(i);
+            return counter;
         }
 
     }
