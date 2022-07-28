@@ -21,8 +21,10 @@ int[] testNums = new int[] { 9,9,9,9,9 };
 
 
 
-Console.WriteLine(Convert.ToInt32("11", 2));
-Console.WriteLine(Convert.ToString(100, 2));
+
+string binary = engine.AddBinary("11", "1");
+Console.WriteLine("LIST");
+Console.WriteLine(binary);
 
 
 

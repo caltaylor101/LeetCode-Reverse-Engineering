@@ -203,11 +203,267 @@ namespace LeetCode_Reverse_Engineering
 
 
 
-        public string AddBinary(string a, string b)
+        public string AddBinary2(string a, string b)
         {
+            string longString = (a.Length >= b.Length) ? a : b;
+            string shortString = (a.Length < b.Length) ? a : b;
+            List<char> newString = new List<char>();
+
+            Console.WriteLine(longString);
+            int longStringIndex = longString.Length - 1;
+            int shortStringIndex = shortString.Length - 1;
+            int calculateValue = 0;
+
+            while (shortStringIndex >= 0)
+            {
+                if (longString[longStringIndex--] == '1')
+                {
+                    calculateValue++;
+                }
+                if (shortString[shortStringIndex--] == '1')
+                {
+                    calculateValue++;
+                }
+
+                if (calculateValue == 3)
+                {
+                    newString.Insert(0, '1');
+                    calculateValue = 1;
+                }
+                else if (calculateValue == 2)
+                {
+                    newString.Insert(0, '0');
+                    calculateValue = 1;
+                }
+                else if (calculateValue == 1)
+                {
+                    newString.Insert(0, '1');
+                    calculateValue = 0;
+                }
+                else
+                {
+                    newString.Insert(0, '0');
+                }
+            }
+
+            while(longStringIndex != -1)
+            {
+                if (longString[longStringIndex--] == '1')
+                {
+                    calculateValue++;
+                }
+
+                if (calculateValue == 2)
+                {
+                    newString.Insert(0, '0');
+                    calculateValue = 1;
+                }
+                else if (calculateValue == 1)
+                {
+                    newString.Insert(0, '1');
+                    calculateValue = 0;
+                }
+                else
+                {
+                    newString.Insert(0, '0');
+                }
+            }
+
+            while (calculateValue !=0)
+            {
+                if (calculateValue == 3)
+                {
+                    newString.Insert(0, '1');
+                    calculateValue = 1;
+                }
+                else if (calculateValue == 2)
+                {
+                    newString.Insert(0, '0');
+                    calculateValue = 1;
+                }
+                else if (calculateValue == 1)
+                {
+                    newString.Insert(0, '1');
+                    calculateValue = 0;
+                }
+                else
+                {
+                    newString.Insert(0, '0');
+                }
+            }
+
+            return new string(newString.ToArray());
 
         }
 
+        
+
+        public string AddBinary3(string a, string b)
+        {
+            string longString = (a.Length >= b.Length) ? a : b;
+            string shortString = (a.Length < b.Length) ? a : b;
+
+            int longStringIndex = longString.Length - 1;
+            int shortStringIndex = shortString.Length - 1;
+
+            while (shortStringIndex >= 0)
+            {
+                if (longString[longStringIndex--] == '1')
+                {
+                    calculateValue++;
+                }
+                if (shortString[shortStringIndex--] == '1')
+                {
+                    calculateValue++;
+                }
+
+                CalculateValue();
+            }
+
+            while (longStringIndex != -1)
+            {
+                if (longString[longStringIndex--] == '1')
+                {
+                    calculateValue++;
+                }
+
+                CalculateValue();
+            }
+
+            while (calculateValue !=0)
+            {
+                CalculateValue();
+            }
+
+            return new string(newString.ToArray());
+
+        }
+
+        private void CalculateValue2()
+        {
+            if (calculateValue == 3)
+            {
+                newString.Insert(0, '1');
+                calculateValue = 1;
+            }
+            else if (calculateValue == 2)
+            {
+                newString.Insert(0, '0');
+                calculateValue = 1;
+            }
+            else if (calculateValue == 1)
+            {
+                newString.Insert(0, '1');
+                calculateValue = 0;
+            }
+            else
+            {
+                newString.Insert(0, '0');
+            }
+        }
+
+        public string AddBinary4(string a, string b)
+        {
+            //Ternary operators to find long and short strings.
+            string longString = (a.Length >= b.Length) ? a : b;
+            string shortString = (a.Length < b.Length) ? a : b;
+
+            //Index values for our strings.
+            int longStringIndex = longString.Length - 1;
+            int shortStringIndex = shortString.Length - 1;
+
+            while (shortStringIndex >= 0)
+            {
+                if (longString[longStringIndex--] == '1')
+                {
+                    calculateValue++;
+                }
+                if (shortString[shortStringIndex--] == '1')
+                {
+                    calculateValue++;
+                }
+
+                CalculateValue();
+            }
+
+            while (longStringIndex != -1)
+            {
+                if (longString[longStringIndex--] == '1')
+                {
+                    calculateValue++;
+                }
+
+                CalculateValue();
+            }
+
+            while (calculateValue !=0)
+            {
+                CalculateValue();
+            }
+            newString.Reverse();
+            return new string(newString.ToArray());
+
+        }
+
+
+
+
+        private int calculateValue = 0;
+        private List<char> newString = new List<char>();
+        public string AddBinary(string a, string b)
+        {
+            //Ternary operators to find long and short strings.
+            string longString = (a.Length >= b.Length) ? a : b;
+            string shortString = (a.Length < b.Length) ? a : b;
+
+            //Index values for our strings.
+            int longStringIndex = longString.Length - 1;
+            int shortStringIndex = shortString.Length - 1;
+
+            while (longStringIndex >= 0)
+            {
+                if (longString[longStringIndex--] == '1')
+                {
+                    calculateValue++;
+                }
+
+                if (shortStringIndex >= 0 && shortString[shortStringIndex--] == '1' )
+                {
+                    calculateValue++;
+                }
+
+                CalculateValue();
+            }
+
+            while (calculateValue != 0)
+            {
+                CalculateValue();
+            }
+
+            newString.Reverse();
+            return new string(newString.ToArray());
+        }
+        private void CalculateValue()
+        {
+            switch (calculateValue)
+            {
+                case 3:
+                    newString.Add('1');
+                    calculateValue = 1;
+                    break;
+                case 2:
+                    newString.Add('0');
+                    calculateValue = 1;
+                    break;
+                case 1:
+                    newString.Add('1');
+                    calculateValue = 0;
+                    break;
+                default:
+                    newString.Add('0');
+                    break;
+            }
+        }
 
 
 
