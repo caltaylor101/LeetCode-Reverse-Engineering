@@ -75,5 +75,43 @@ namespace LeetCode_Reverse_Engineering
             return counter;
         }
 
+
+
+
+        public int StrStr(string haystack, string needle)
+        {
+            if (needle == "") return 0;
+            if (needle.Length > haystack.Length) return -1;
+            int needleIndex = 0;
+            int returnIndex = -1;
+
+            for (int i = 0; i < haystack.Length; i++)
+            {
+                //Check 
+                if (haystack.Length - i < needle.Length) return -1;
+
+                if (haystack[i] == needle[needleIndex])
+                {
+                    returnIndex = i;
+                    while (needleIndex < needle.Length)
+                    {
+                        if (haystack[returnIndex] != needle[needleIndex])
+                        {
+                            needleIndex = 0;
+                            returnIndex = -1;
+                            break;
+                        }
+                        else if (haystack[returnIndex] == needle[needleIndex] && needleIndex == needle.Length - 1)
+                        {
+                            return i;
+                        }
+                        returnIndex++;
+                        needleIndex++;
+                    }
+                }
+            }
+            return returnIndex;
+        }
+
     }
 }

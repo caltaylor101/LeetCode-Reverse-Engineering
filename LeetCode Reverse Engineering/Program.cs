@@ -20,7 +20,7 @@ int[] testNums = new int[] { 1 };
 //Console.WriteLine(Array.BinarySearch(testNums, 3, testNums.Length - 3, 10));
 
 
-Console.WriteLine("counter is " + engine.RemoveElement(testNums, 1));
+Console.WriteLine("counter is " + engine.StrStr("mississippi", "issip"));
 
 
 
