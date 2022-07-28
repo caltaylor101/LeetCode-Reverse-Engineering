@@ -85,7 +85,7 @@ namespace LeetCode_Reverse_Engineering
             int needleIndex = 0;
             int checkIndex = -1;
 
-            for (int i = 0; i < haystack.Length && haystack.Length -i -1 < needle.Length ; i++)
+            for (int i = 0; i < haystack.Length; i++)
             {
                 //If the remaining haystack is smaller than our needle, then return -1 because it is impossible for needle to exist.
                 if (haystack.Length - i < needle.Length) return -1;
@@ -118,6 +118,102 @@ namespace LeetCode_Reverse_Engineering
             }
             return checkIndex;
         }
+
+
+
+
+
+
+
+
+        public int LengthOfLastWord(string s)
+        {
+            int startIndex = 0;
+            bool startCount = false;
+            for (int i = s.Length - 1; i >= 0; i--)
+            {
+                //If we are counting a word and find a whitespace, then we return the end of the word - index of the white space.
+                if (s[i] == ' ' && startCount)
+                {
+                    return startIndex - i;
+                }
+                //If we are hitting whitespace at the end of the string, keep going going till we find a letter.
+                //Mark a boolean trigger, startCount, then keep track of the end of the word, startIndex.
+                else if (s[i] != ' ' && !startCount)
+                {
+                    startCount = true;
+                    startIndex = i;
+                }
+            }
+            
+            //Return the startIndex + 1. 
+            //This scenario happens when the loop ends at 0.
+            //So if we had a string, "x      ", then x would index 0, and start index would be 0.
+            //We add 1 to account for that extra space. 
+            return startIndex + 1;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public int[] PlusOne(int[] digits)
+        {
+            for (int i = digits.Length - 1; i >= 0; i--)
+            {
+                //If a digit is 9 make it 0 and continue.
+                //No need to calculate anything.
+                if (digits[i] == 9)
+                {
+                    digits[i] = 0;
+                }
+                //Otherwise add 1 and break the loop to return digits.
+                else
+                {
+                    digits[i] += 1;
+                    break;
+                }
+            }
+
+            //Since we know there are no leading 0's, we can quickly check if this is a 0.
+            if (digits[0] == 0)
+            {
+                //Create an empty array with 1 extra spot than digits for the extra value. 
+                int[] result = new int[digits.Length + 1];
+                //Set the first spot in the result array to 1.
+                result[0] = 1;
+                //Copy digits to the result array starting at index 1.
+                digits.CopyTo(result, 1);
+                return result;
+            }
+
+            
+            return digits;
+        }
+
+
+
+
+
+        public string AddBinary(string a, string b)
+        {
+
+        }
+
+
+
+
+
+
+
 
     }
 }
