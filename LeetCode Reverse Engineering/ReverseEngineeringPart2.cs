@@ -27,26 +27,51 @@ namespace LeetCode_Reverse_Engineering
             return "";
         }
 
-        public int RemoveElement(int[] nums, int val)
+        public int RemoveElement2(int[] nums, int val)
         {
             if (nums.Length == 0) return 0;
+            //Our offset
             int offsetShift = 0;
-            int counter = nums.Length;
 
             for (int i = 0; i < nums.Length; i++)
             {
-                if (nums[i] == val)
+                //If we hit a value that equals ours, then we don't count our offset. 
+                //So for example, if i = 3, and it equals val, then offset will become 2, essentially shifting every element over.
+                if (nums[i] != val)
                 {
-                    offsetShift++;
-                    counter--;
-                }
-                else
-                {
-                    nums[i - offsetShift] = nums[i];
+                    nums[offsetShift++] = nums[i];
                 }
                 
             }
-            foreach (var i in nums) Console.WriteLine(i);
+            return offsetShift;
+        }
+
+        public int RemoveElement(int[] nums, int val)
+        {
+            if (nums.Length == 0) return 0;
+
+            //right pointer
+            int right = nums.Length - 1;
+            int counter = nums.Length;
+
+            for (int i = 0; i <= right; i++)
+            {
+                if (nums[i] == val)
+                {
+                    //If the right index is the same as our val, we can skip past it and keep track of the counter. 
+                    while (i < right && nums[right] == val)
+                    {
+                        right--;
+                        counter--;
+                    }
+                    //Then we replace the element with the right side element.
+                    nums[i] = nums[right];
+                    //move the right index over again and continue.
+                    right--;
+                    counter--;
+                }
+
+            }
             return counter;
         }
 
