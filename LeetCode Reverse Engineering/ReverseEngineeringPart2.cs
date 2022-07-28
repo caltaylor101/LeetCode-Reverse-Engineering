@@ -83,34 +83,40 @@ namespace LeetCode_Reverse_Engineering
             if (needle == "") return 0;
             if (needle.Length > haystack.Length) return -1;
             int needleIndex = 0;
-            int returnIndex = -1;
+            int checkIndex = -1;
 
-            for (int i = 0; i < haystack.Length; i++)
+            for (int i = 0; i < haystack.Length && haystack.Length -i -1 < needle.Length ; i++)
             {
-                //Check 
+                //If the remaining haystack is smaller than our needle, then return -1 because it is impossible for needle to exist.
                 if (haystack.Length - i < needle.Length) return -1;
 
                 if (haystack[i] == needle[needleIndex])
                 {
-                    returnIndex = i;
+                    //Set our index to check. 
+                    checkIndex = i;
+                    //Loop through the needle using the check index.
                     while (needleIndex < needle.Length)
                     {
-                        if (haystack[returnIndex] != needle[needleIndex])
+                        //If it doesn't match, then reset the variables and break the loop.
+                        if (haystack[checkIndex] != needle[needleIndex])
                         {
                             needleIndex = 0;
-                            returnIndex = -1;
+                            checkIndex = -1;
                             break;
                         }
-                        else if (haystack[returnIndex] == needle[needleIndex] && needleIndex == needle.Length - 1)
+                        //If we check the last index of the needle, and it equals, then we found the string.
+                        //Return i, as that is where we started.
+                        else if (haystack[checkIndex] == needle[needleIndex] && needleIndex == needle.Length - 1)
                         {
                             return i;
                         }
-                        returnIndex++;
+                        //Otherwise, increase and keep comparing. 
+                        checkIndex++;
                         needleIndex++;
                     }
                 }
             }
-            return returnIndex;
+            return checkIndex;
         }
 
     }
