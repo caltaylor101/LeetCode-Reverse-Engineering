@@ -44,8 +44,71 @@ namespace LeetCode_Reverse_Engineering
 
     internal class ReverseEngineering
     {
+
+        public int ThreeSumClosest(int[] nums, int target)
+        {
+            int closestSum = int.MaxValue;
+            int minDifference = int.MaxValue;
+            Array.Sort(nums);
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int left = i + 1;
+                int right = nums.Length - 1;
+                while (left < right)
+                {
+                    int sum = nums[i] + nums[left] + nums[right];
+                    if (sum == target) return target;
+                    else if (sum < target)
+                    {
+                        left++;
+                    }
+                    else
+                    {
+                        right--;
+                    }
+
+
+                    if (minDifference > Math.Abs(target - sum))
+                    {
+                        minDifference = Math.Abs(target - sum);
+                        closestSum = sum;
+                    }
+
+
+                }
+
+            }
+            return closestSum;
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public string Convert(string s, int numRows)
         {
+
             //If there is 1 row, just return the string.
             if (numRows == 1) return s;
 
