@@ -44,6 +44,136 @@ namespace LeetCode_Reverse_Engineering
 
     internal class ReverseEngineering
     {
+        public string Convert(string s, int numRows)
+        {
+            //If there is 1 row, just return the string.
+            if (numRows == 1) return s;
+
+            //The list that will hold each row
+            List<StringBuilder> rows = new List<StringBuilder>();
+            //Counter to add characters to the correct row.
+            int counter = 0;
+            //A trigger to zigzag through the string.
+            bool reverse = false;
+            string returnString = "";
+
+            //Create the individual StringBuilders based off the number of rows.
+            for (int i = 1; i <= numRows; i++)
+            {
+                rows.Add(new StringBuilder());
+            }
+
+            foreach (char c in s)
+            {
+                //This trigger allows us to move back and forth through the string evenly.
+                if (counter == numRows - 1)
+                {
+                    reverse = true;
+                }
+                if (counter == 0)
+                {
+                    reverse = false;
+                }
+
+                //Add the character to the row it belongs in.
+                rows[counter].Append(c);
+                //Ternary operator that basically says if(reverse) counter--; else counter++;
+                counter += (reverse) ? -1 : 1;
+            }
+
+            //Concatenate everything to the blank return string. 
+            foreach(StringBuilder row in rows)
+            {
+                returnString += (row.ToString());
+            }
+
+            return returnString;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private List<IList<int>> resultThreeSum = new List<IList<int>>();
+        public IList<IList<int>> ThreeSum(int[] nums)
+        {
+            Array.Sort(nums);
+            if(nums.Length > 2)
+            {
+                for (int i = 0; i < nums.Length && nums[i] <= 0; i++)
+                {
+                    if (i == 0 || nums[i - 1] != nums[i])
+                    {
+                        TwoSum(i, nums);
+                    }
+                }
+            }
+            
+            return resultThreeSum;
+        }
+
+        private void TwoSum(int i, int[] nums)
+        {
+            int left = i + 1;
+            int right = nums.Length - 1;
+
+            while(left < right)
+            {
+                int sum = nums[i] + nums[left] + nums[right];
+                if (sum > 0)
+                {
+                        right--;
+                }
+                else if (sum < 0)
+                {
+                        left++;
+                }
+                else
+                {
+                    resultThreeSum.Add(new List<int>() { nums[i], nums[left], nums[right] });
+                    left++;
+                    right--;
+                    while (left < right && nums[left] == nums[left - 1])
+                    {
+                        left++;
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public int MajorityElement(int[] nums)
         {

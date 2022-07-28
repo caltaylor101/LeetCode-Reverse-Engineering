@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using LeetCode_Reverse_Engineering;
+using System.Text;
 
 Console.WriteLine("Hello, World!");
 
@@ -21,7 +22,8 @@ int[] testNums = new int[] { 1,2,3 };
 
 int[] list = new int[] { 4,4,4,4,1,2,1,2,2 };
 
-Console.WriteLine(engine.MajorityElement(list));
+Console.WriteLine(engine.Convert("PAYPALISHIRING", 3));
+
 
 
 
