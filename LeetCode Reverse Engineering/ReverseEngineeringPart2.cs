@@ -413,20 +413,27 @@ namespace LeetCode_Reverse_Engineering
         public string AddBinary(string a, string b)
         {
             //Ternary operators to find long and short strings.
+            //Basically read as: if a.Length >= b.Length longString = a; else longString = b;
             string longString = (a.Length >= b.Length) ? a : b;
-            string shortString = (a.Length < b.Length) ? a : b;
+            //If longString == a, shorstring = b; else shortstring = a
+            string shortString = (longString == a) ? b : a;
 
             //Index values for our strings.
             int longStringIndex = longString.Length - 1;
             int shortStringIndex = shortString.Length - 1;
 
+            //Optional. Since we know the general capacity of our list, we can save an O(n log(n)) operation by setting capacity.
+            newString.Capacity = longString.Length + shortString.Length + 1;
+
             while (longStringIndex >= 0)
             {
+                //After this condition executes, lower longStringIndex by 1
                 if (longString[longStringIndex--] == '1')
                 {
                     calculateValue++;
                 }
 
+                //check if shortString index is 0, if not then lower it's index when checking the if condition.
                 if (shortStringIndex >= 0 && shortString[shortStringIndex--] == '1' )
                 {
                     calculateValue++;
@@ -435,11 +442,10 @@ namespace LeetCode_Reverse_Engineering
                 CalculateValue();
             }
 
-            while (calculateValue != 0)
-            {
-                CalculateValue();
-            }
+            //Clean up the remaining CalculateValue.
+            if (calculateValue != 0) CalculateValue();
 
+            //Reverse our list and then transfer it to a char array to return as a new string. 
             newString.Reverse();
             return new string(newString.ToArray());
         }
@@ -464,6 +470,18 @@ namespace LeetCode_Reverse_Engineering
                     break;
             }
         }
+
+        
+
+
+
+
+
+
+
+
+
+
 
 
 

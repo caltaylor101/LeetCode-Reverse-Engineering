@@ -22,9 +22,19 @@ int[] testNums = new int[] { 9,9,9,9,9 };
 
 
 
-string binary = engine.AddBinary("11", "1");
-Console.WriteLine("LIST");
-Console.WriteLine(binary);
+string binary = engine.AddBinary("111111111111111111010101010110110011000", "1111111111111111111000101101110101010101111001011111");
+
+List<int> testList = new List<int>();
+
+
+testList.Add(1);
+testList.Add(1);
+testList.Add(1);
+testList.Add(1);
+testList.Add(1);
+
+Console.WriteLine("test list capacity {0} and test list count {1}", testList.Capacity, testList.Count);
+
 
 
 
