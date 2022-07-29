@@ -471,7 +471,50 @@ namespace LeetCode_Reverse_Engineering
             }
         }
 
-        
+
+
+
+
+
+        //Possible range of roots are 0 - 46,340
+        public int MySqrt(int x)
+        {
+            //Takes care of max edge case.
+            if (x >= 2147395600) return 46340;
+            //Takes care of min edge case.
+            if (x == 0) return 0;
+
+            //The maximum ceiling.
+            int maxSquare = 46340;
+            //The minimum square we will return
+            int minSquare = 1;
+
+            //The root calculated for our guess.
+            int guessRoot = 0;
+            //The guess.
+            int guess = 0;
+
+            // if this is 1, then minSquare is our answer. 
+            while (maxSquare - minSquare != 1)
+            {
+                //Get the middle value of maxSquare and minSquare
+                guessRoot = (maxSquare + minSquare) / 2;
+                //Multiply the root and check the guess with a standard binary search pattern.
+                guess = guessRoot * guessRoot;
+                if (guess == x) return guessRoot;
+                else if (guess > x)
+                {
+                    maxSquare = guessRoot;
+                }
+                else
+                {
+                    minSquare = guessRoot;
+                }
+            }
+
+            return minSquare;
+
+        }
 
 
 
@@ -482,6 +525,138 @@ namespace LeetCode_Reverse_Engineering
 
 
 
+
+
+
+
+
+
+
+
+
+        public ListNode DeleteDuplicates3(ListNode head)
+        {
+            ListNode followNode = new ListNode(0, head);
+            ListNode traverseNode = head;
+            HashSet<int> values = new HashSet<int>();
+
+            while(traverseNode != null)
+            {
+                if (!values.Add(traverseNode.val))
+                {
+                    followNode.next = traverseNode.next;
+                    traverseNode = traverseNode.next;
+                }
+                else
+                {
+                    traverseNode = traverseNode.next;
+                    followNode = followNode.next;
+                }
+            }
+
+            return head;
+
+        }
+
+
+
+
+        public ListNode DeleteDuplicates2(ListNode head)
+        {
+            ListNode followNode = new ListNode(-101, head);
+            ListNode traverseNode = head;
+
+            while(traverseNode != null)
+            {
+                if (followNode.val == traverseNode.val)
+                {
+                    followNode.next = traverseNode.next;
+                    traverseNode = traverseNode.next;
+                }
+                else
+                {
+                    traverseNode = traverseNode.next;
+                    followNode = followNode.next;
+                }
+            }
+
+            return head;
+
+        }
+
+
+        public ListNode DeleteDuplicates(ListNode head)
+        {
+            //A reference to the list so that we can return the head at the end
+            ListNode traverseNode = head;
+
+            while(traverseNode != null)
+            {
+                //Make sure the next exists, if it does and the values equal, then reassign the traversal node to skip it.
+                if (traverseNode.next != null && traverseNode.val == traverseNode.next.val)
+                {
+                    traverseNode.next = traverseNode.next.next;
+                }
+                else
+                {
+                    //Otherwise, traverse through the list.
+                    traverseNode = traverseNode.next;
+                }
+            }
+
+            //Return the head.
+            return head;
+
+        }
+
+
+        private Dictionary<Node, Node> map = new Dictionary<Node, Node>();
+        public Node CloneGraph2(Node node)
+        {
+            if (node == null) return null;
+            if (!map.ContainsKey(node))
+            {
+                map.Add(node, new Node(node.val));
+                foreach(var n in node.neighbors)
+                {
+                    map[node].neighbors.Add(CloneGraph(n));
+                }
+            }
+            return map[node];
+        }
+
+        public Node CloneGraph(Node node)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            Dictionary<Node, Node> dict = new Dictionary<Node, Node>();
+            dict.Add(node, new Node(node.val));
+
+            dfs(node, dict);
+            return dict[node];
+
+        }
+
+        private void dfs(Node node, Dictionary<Node, Node> dict)
+        {
+            if (node == null) return;
+
+            foreach (var neighbor in node.neighbors)
+            {
+                if (!dict.ContainsKey(neighbor))
+                {
+                    dict.Add(neighbor, new Node(neighbor.val));
+                    dfs(neighbor, dict);
+                }
+
+                dict[node].neighbors.Add(dict[neighbor]);
+            }
+
+
+        }
 
 
 

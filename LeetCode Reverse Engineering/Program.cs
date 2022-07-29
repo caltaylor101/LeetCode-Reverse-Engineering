@@ -3,11 +3,6 @@ using LeetCode_Reverse_Engineering;
 using System.Text;
 
 
-ListNode node1 = new ListNode(5); 
-ListNode node2 = new ListNode(4, node1); 
-ListNode node3 = new ListNode(3, node2); 
-ListNode node4 = new ListNode(2, node3); 
-ListNode node5 = new ListNode(1);
 
 ReverseEngineeringPart2 engine = new ReverseEngineeringPart2();
 
@@ -26,14 +21,20 @@ string binary = engine.AddBinary("111111111111111111010101010110110011000", "111
 
 List<int> testList = new List<int>();
 
+ListNode node1 = new ListNode(3, null);
+ListNode node2 = new ListNode(3, node1);
+ListNode node3 = new ListNode(2, node2);
+ListNode node4 = new ListNode(1, node3);
+ListNode node5 = new ListNode(1, node4);
 
-testList.Add(1);
-testList.Add(1);
-testList.Add(1);
-testList.Add(1);
-testList.Add(1);
+ListNode returnHead = engine.DeleteDuplicates(node5);
 
-Console.WriteLine("test list capacity {0} and test list count {1}", testList.Capacity, testList.Count);
+while (returnHead != null)
+{
+    Console.WriteLine(returnHead.val);
+    returnHead = returnHead.next;
+}
+
 
 
 
