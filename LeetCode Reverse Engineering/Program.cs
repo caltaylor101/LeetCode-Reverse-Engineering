@@ -28,11 +28,27 @@ ListNode node5 = new ListNode(1, node4);
 
 ListNode returnHead = engine.DeleteDuplicates(node5);
 
+char[][] board = new char[][]{
+ new char[] {'8','3','.','.','7','2','.','.','.'}
+,new char[] {'6','.','.','1','9','5','.','.','.'}
+,new char[] {'.','9','2','.','.','.','.','6','.'}
+,new char[] {'3','.','.','.','6','.','.','.','3'}
+,new char[] {'4','.','.','8','8','3','.','.','1'}
+,new char[] {'7','.','.','.','2','.','.','.','6'}
+,new char[] {'.','6','.','.','.','.','2','8','.'}
+,new char[] {'.','.','.','4','1','9','.','.','5'}
+,new char[] {'.','.','.','.','8','.','.','7','9'}};
 
+/*for (int i = 0; i < board.Length; i++)
+{
+    for (int k = 0; k < board[i].Length; k++) Console.WriteLine("k is {0} and borad is {1}",k,board[i][k]);
+}*/
 
-int[] returnArray = engine.SearchRange(new int[] {2,2}, 2);
+Console.WriteLine(engine.IsValidSudoku(board));
 
-foreach (var i in returnArray) Console.WriteLine(i);
+int test = 1;
+Console.WriteLine(test / 3);
+
 
 
 

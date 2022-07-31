@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LeetCode_Reverse_Engineering
@@ -743,6 +744,77 @@ namespace LeetCode_Reverse_Engineering
 
 
 
+
+
+
+
+        private Regex regex = new Regex(@"^\d$");
+        private HashSet<string> flag = new HashSet<string>();
+        public bool IsValidSudoku(char[][] board)
+        {
+            //Check all the way down, and all the way right for a match. 
+            for (int i = 0; i < board.Length; i++)
+            {
+                for (int k = 0; k < board[i].Length; k++)
+                {
+                    if (char.IsNumber(board[i][k]))
+                    {
+                        //Check the block
+                        int vertical = i / 3;
+                        vertical *= 3;
+                        int horizontal = k / 3;
+                        horizontal *= 3;
+                        for (int verticalTest = vertical; verticalTest < vertical + 3; verticalTest++)
+                        {
+                            for (int horizontalTest = horizontal; horizontalTest < horizontal + 3; horizontalTest++)
+                            {
+                                if (!flag.Add(verticalTest.ToString() + horizontalTest.ToString() + board[i][k])) continue;
+                                if (board[verticalTest][horizontalTest] == board[i][k] && (k != horizontalTest || i != verticalTest)) return false;
+                            }
+                        }
+                        // test vertically
+                        vertical = 0;
+                        while (vertical < board.Length)
+                        {
+                            //cache the result and continue if it has already been checked.
+                            if (!flag.Add(vertical.ToString() + k.ToString() + board[i][k].ToString()))
+                            {
+                                vertical++;
+                                continue;
+                            }
+                            if (board[i][k] == board[vertical][k] && i != vertical)
+                            {
+                                return false;
+                            }
+                            vertical++;
+                        }
+                        // test horizontally
+                        horizontal = 0;
+                        while (horizontal < board[i].Length)
+                        {
+                            //cache the result and continue if it has already been checked.
+                            if (!flag.Add(i.ToString() + horizontal.ToString() + board[i][k].ToString()))
+                            {
+                                horizontal++;
+                                continue;
+                            }
+                            if (board[i][k] == board[i][horizontal] && k != horizontal)
+                            {
+                                return false;
+                            }
+                            horizontal++;
+                        }
+                        
+
+                    }
+                }
+            }
+
+            return true;
+        }
+
+
+        
 
 
 
