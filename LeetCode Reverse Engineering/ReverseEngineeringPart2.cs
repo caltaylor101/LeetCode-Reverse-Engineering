@@ -663,6 +663,59 @@ namespace LeetCode_Reverse_Engineering
 
 
 
+        public int[] SearchRange(int[] nums, int target)
+        {
+            if (nums.Length == 0) return new int[] { -1, -1 };
+
+            int left = 0;
+            int right = nums.Length - 1;
+            var mid = (left + right) / 2;
+            //First do a binary search for the target. 
+
+            while (left <= right)
+            {
+                mid = (left + right) / 2;
+                if (nums[mid] == target) break;
+                else if (nums[mid] > target)
+                {
+                    right = mid - 1;
+                }
+                else
+                {
+                    left = mid + 1;
+                }
+            }
+
+            //If the target wasn't found, then return {-1, -1}
+            if (nums[mid] != target)
+            {
+                return new int[] { -1, -1 };
+            }
+            //Otherwise, we find the range it exists in, and return that range.
+            else
+            {
+                left = mid;
+                right = mid;
+                while (left - 1 >= 0 && nums[left - 1] == nums[mid])
+                {
+                    left--;
+                }
+                while (right + 1 <= nums.Length - 1 && nums[right + 1] == nums[mid])
+                {
+                    right++;
+                }
+            }
+
+            return new int[] { left, right };
+            
+        }
+
+
+
+
+
+
+
 
     }
 }

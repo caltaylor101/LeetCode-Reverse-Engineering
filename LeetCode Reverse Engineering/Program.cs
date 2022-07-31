@@ -17,7 +17,6 @@ int[] testNums = new int[] { 9,9,9,9,9 };
 
 
 
-string binary = engine.AddBinary("111111111111111111010101010110110011000", "1111111111111111111000101101110101010101111001011111");
 
 List<int> testList = new List<int>();
 
@@ -29,12 +28,11 @@ ListNode node5 = new ListNode(1, node4);
 
 ListNode returnHead = engine.DeleteDuplicates(node5);
 
-while (returnHead != null)
-{
-    Console.WriteLine(returnHead.val);
-    returnHead = returnHead.next;
-}
 
+
+int[] returnArray = engine.SearchRange(new int[] {2,2}, 2);
+
+foreach (var i in returnArray) Console.WriteLine(i);
 
 
 
