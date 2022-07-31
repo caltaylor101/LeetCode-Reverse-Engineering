@@ -41,7 +41,7 @@ namespace LeetCode_Reverse_Engineering
                 {
                     nums[offsetShift++] = nums[i];
                 }
-                
+
             }
             return offsetShift;
         }
@@ -145,7 +145,7 @@ namespace LeetCode_Reverse_Engineering
                     startIndex = i;
                 }
             }
-            
+
             //Return the startIndex + 1. 
             //This scenario happens when the loop ends at 0.
             //So if we had a string, "x      ", then x would index 0, and start index would be 0.
@@ -195,7 +195,7 @@ namespace LeetCode_Reverse_Engineering
                 return result;
             }
 
-            
+
             return digits;
         }
 
@@ -246,7 +246,7 @@ namespace LeetCode_Reverse_Engineering
                 }
             }
 
-            while(longStringIndex != -1)
+            while (longStringIndex != -1)
             {
                 if (longString[longStringIndex--] == '1')
                 {
@@ -269,7 +269,7 @@ namespace LeetCode_Reverse_Engineering
                 }
             }
 
-            while (calculateValue !=0)
+            while (calculateValue != 0)
             {
                 if (calculateValue == 3)
                 {
@@ -296,7 +296,7 @@ namespace LeetCode_Reverse_Engineering
 
         }
 
-        
+
 
         public string AddBinary3(string a, string b)
         {
@@ -330,7 +330,7 @@ namespace LeetCode_Reverse_Engineering
                 CalculateValue();
             }
 
-            while (calculateValue !=0)
+            while (calculateValue != 0)
             {
                 CalculateValue();
             }
@@ -396,7 +396,7 @@ namespace LeetCode_Reverse_Engineering
                 CalculateValue();
             }
 
-            while (calculateValue !=0)
+            while (calculateValue != 0)
             {
                 CalculateValue();
             }
@@ -434,7 +434,7 @@ namespace LeetCode_Reverse_Engineering
                 }
 
                 //check if shortString index is 0, if not then lower it's index when checking the if condition.
-                if (shortStringIndex >= 0 && shortString[shortStringIndex--] == '1' )
+                if (shortStringIndex >= 0 && shortString[shortStringIndex--] == '1')
                 {
                     calculateValue++;
                 }
@@ -540,7 +540,7 @@ namespace LeetCode_Reverse_Engineering
             ListNode traverseNode = head;
             HashSet<int> values = new HashSet<int>();
 
-            while(traverseNode != null)
+            while (traverseNode != null)
             {
                 if (!values.Add(traverseNode.val))
                 {
@@ -566,7 +566,7 @@ namespace LeetCode_Reverse_Engineering
             ListNode followNode = new ListNode(-101, head);
             ListNode traverseNode = head;
 
-            while(traverseNode != null)
+            while (traverseNode != null)
             {
                 if (followNode.val == traverseNode.val)
                 {
@@ -590,7 +590,7 @@ namespace LeetCode_Reverse_Engineering
             //A reference to the list so that we can return the head at the end
             ListNode traverseNode = head;
 
-            while(traverseNode != null)
+            while (traverseNode != null)
             {
                 //Make sure the next exists, if it does and the values equal, then reassign the traversal node to skip it.
                 if (traverseNode.next != null && traverseNode.val == traverseNode.next.val)
@@ -617,7 +617,7 @@ namespace LeetCode_Reverse_Engineering
             if (!map.ContainsKey(node))
             {
                 map.Add(node, new Node(node.val));
-                foreach(var n in node.neighbors)
+                foreach (var n in node.neighbors)
                 {
                     map[node].neighbors.Add(CloneGraph(n));
                 }
@@ -663,15 +663,15 @@ namespace LeetCode_Reverse_Engineering
 
 
 
-        public int[] SearchRange(int[] nums, int target)
+        public int[] SearchRange2(int[] nums, int target)
         {
             if (nums.Length == 0) return new int[] { -1, -1 };
 
             int left = 0;
             int right = nums.Length - 1;
-            var mid = (left + right) / 2;
-            //First do a binary search for the target. 
+            var mid = 0;
 
+            //First do a binary search for the target. 
             while (left <= right)
             {
                 mid = (left + right) / 2;
@@ -687,27 +687,57 @@ namespace LeetCode_Reverse_Engineering
             }
 
             //If the target wasn't found, then return {-1, -1}
-            if (nums[mid] != target)
+            if (nums[mid] != target) return new int[] { -1, -1 };
+
+            //Otherwise, we find the range it exists in, and return that range.
+            left = mid;
+            right = mid;
+            while (left - 1 >= 0 && nums[left - 1] == nums[mid])
             {
-                return new int[] { -1, -1 };
+                left--;
             }
+            while (right + 1 <= nums.Length - 1 && nums[right + 1] == nums[mid])
+            {
+                right++;
+            }
+
+            return new int[] { left, right };
+
+        }
+
+
+
+        public int[] SearchRange(int[] nums, int target)
+        {
+            if (nums.Length == 0) return new int[] { -1, -1 };
+
+            int left = 0;
+            int right = nums.Length - 1;
+
+            //First do a binary search for the target. 
+            int result = Array.BinarySearch(nums, target);
+
+            //If the target wasn't found, then return {-1, -1}
+            //When BinarySearch() doesn't find the target, it will return a negative number. 
+            if (result < 0) return new int[] { -1, -1 };
+
             //Otherwise, we find the range it exists in, and return that range.
             else
             {
-                left = mid;
-                right = mid;
-                while (left - 1 >= 0 && nums[left - 1] == nums[mid])
+                left = result;
+                right = result;
+                while (left - 1 >= 0 && nums[left - 1] == nums[result])
                 {
                     left--;
                 }
-                while (right + 1 <= nums.Length - 1 && nums[right + 1] == nums[mid])
+                while (right + 1 <= nums.Length - 1 && nums[right + 1] == nums[result])
                 {
                     right++;
                 }
             }
 
             return new int[] { left, right };
-            
+
         }
 
 
