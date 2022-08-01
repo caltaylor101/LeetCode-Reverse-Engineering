@@ -69,7 +69,7 @@ char[][] board3 = new char[][]
     for (int k = 0; k < board[i].Length; k++) Console.WriteLine("k is {0} and borad is {1}",k,board[i][k]);
 }*/
 
-Console.WriteLine(engine.IsValidSudoku(board));
+Console.WriteLine(engine.IsValidSudoku(board3));
 
 
 

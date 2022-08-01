@@ -752,7 +752,6 @@ namespace LeetCode_Reverse_Engineering
         private HashSet<string> flag = new HashSet<string>();
         public bool IsValidSudoku2(char[][] board)
         {
-            //Check all the way down, and all the way right for a match. 
             for (int i = 0; i < board.Length; i++)
             {
                 for (int k = 0; k < board[i].Length; k++)
@@ -804,8 +803,6 @@ namespace LeetCode_Reverse_Engineering
                             }
                             horizontal++;
                         }
-
-
                     }
                 }
             }
@@ -819,7 +816,6 @@ namespace LeetCode_Reverse_Engineering
         private int counter = 0;
         public bool IsValidSudoku3(char[][] board)
         {
-            //Check each block
             for (int i = 0; i < board.Length; i++)
             {
                 for (int k = 0; k < board[i].Length; k++)
@@ -832,6 +828,7 @@ namespace LeetCode_Reverse_Engineering
                         int horizontal = k / 3;
                         horizontal *= 3;
 
+                        //A cache to stop iterations.
                         if (blockFlag.Add("v" + vertical.ToString() + "h" + horizontal.ToString()))
                         {
                             for (int verticalTest = vertical; verticalTest < vertical + 3; verticalTest++)
@@ -849,7 +846,6 @@ namespace LeetCode_Reverse_Engineering
                     }
                 }
             }
-            Console.WriteLine("times run {0}",counter);
 
             for (int i = 0; i < board.Length; i++)
             {
@@ -890,8 +886,6 @@ namespace LeetCode_Reverse_Engineering
                     }
                 }
             }
-
-            foreach (var key in blockFlag) Console.WriteLine(key);
 
             return true;
         }
@@ -956,46 +950,49 @@ namespace LeetCode_Reverse_Engineering
         public bool IsValidSudoku(char[][] board)
         {
             HashSet<char> checkBlock = new HashSet<char>();
-            HashSet<string> blockFlag = new HashSet<string>();
-            Dictionary<char, List<List<int>>> dict = new Dictionary<char, List<List<int>>>();
+            Dictionary<char, List<List<int>>> valueDict = new Dictionary<char, List<List<int>>>();
             HashSet<int> verticalSet = new HashSet<int>();
             HashSet<int> horizontalSet = new HashSet<int>();
 
-            //Check each block
+            //Check each 3x3 block first.
+            //These first 2 for loops make sure we switch to a new block on each iteration, which is why they are incrementing by 3.
             for (int i = 0; i < board.Length; i += 3)
             {
                 for (int k = 0; k < board[i].Length; k += 3)
                 {
-                    int vertical = i;
-                    int horizontal = k;
-
-                    if (blockFlag.Add("v" + vertical.ToString() + "h" + horizontal.ToString()))
+                    //This represents our vertical test, we want the 3 rows.
+                    for (int verticalTest = i; verticalTest < i + 3; verticalTest++)
                     {
-                        for (int verticalTest = vertical; verticalTest < vertical + 3; verticalTest++)
+                        //This represents the horizontal test on the next 3 columns. 
+                        for (int horizontalTest = k; horizontalTest < k + 3; horizontalTest++)
                         {
-                            for (int horizontalTest = horizontal; horizontalTest < horizontal + 3; horizontalTest++)
+                            //If it's a "." then we just continue through the loop. 
+                            if (board[verticalTest][horizontalTest] == '.') continue;
+                            //We add each value to a checkBlock set. 
+                            //If there are duplicate values in this hashset we return false. 
+                            if (!checkBlock.Add(board[verticalTest][horizontalTest])) return false;
+                            //We try to add the value to the dictionary. 
+                            //If the value exists, then we add the coordinates to a list of values. 
+                            if (!valueDict.TryAdd(board[verticalTest][horizontalTest], new List<List<int>>() { new List<int>() { verticalTest, horizontalTest } }))
                             {
-                                if (board[verticalTest][horizontalTest] == '.') continue;
-                                if (char.IsNumber(board[verticalTest][horizontalTest]) && !checkBlock.Add(board[verticalTest][horizontalTest])) return false;
-                                if (!dict.TryAdd(board[verticalTest][horizontalTest], new List<List<int>>() {new List<int>() {verticalTest, horizontalTest}}))
-                                {
-                                    dict[board[verticalTest][horizontalTest]].Add(new List<int>() { verticalTest, horizontalTest });
-                                }
+                                valueDict[board[verticalTest][horizontalTest]].Add(new List<int>() { verticalTest, horizontalTest });
                             }
                         }
-                        checkBlock.Clear();
                     }
+                    //Clear the checkBlock for the next iteration. 
+                    checkBlock.Clear();
                 }
             }
-            
 
-            foreach (var key in dict)
+            foreach (var key in valueDict)
             {
-                foreach (var item in key.Value)
+                //for each list in the values recorded, we check to see if any vertical or horizontal values match. 
+                foreach (var list in key.Value)
                 {
-                    if (!verticalSet.Add(item[0])) return false;
-                    if (!horizontalSet.Add(item[1])) return false;
+                    if (!verticalSet.Add(list[0])) return false;
+                    if (!horizontalSet.Add(list[1])) return false;
                 }
+                //Clear the sets and test the next key.
                 verticalSet.Clear();
                 horizontalSet.Clear();
             }
