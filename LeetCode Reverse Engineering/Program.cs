@@ -4,7 +4,7 @@ using System.Text;
 
 
 
-ReverseEngineeringPart2 engine = new ReverseEngineeringPart2();
+ReverseEngineeringPart3 engine = new ReverseEngineeringPart3();
 
 //int[] testNums = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 //int[] testNums = new int[] { 11,12,13,14,1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -26,7 +26,6 @@ ListNode node3 = new ListNode(2, node2);
 ListNode node4 = new ListNode(1, node3);
 ListNode node5 = new ListNode(1, node4);
 
-ListNode returnHead = engine.DeleteDuplicates(node5);
 
 char[][] board = new char[][]{
  new char[] {'8','3','.','.','7','2','.','.','.'}
@@ -69,8 +68,7 @@ char[][] board3 = new char[][]
     for (int k = 0; k < board[i].Length; k++) Console.WriteLine("k is {0} and borad is {1}",k,board[i][k]);
 }*/
 
-Console.WriteLine(engine.IsValidSudoku(board3));
-
+Console.WriteLine( engine.CountAndSay(6));
 
 
 
