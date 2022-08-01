@@ -750,7 +750,7 @@ namespace LeetCode_Reverse_Engineering
 
         private Regex regex = new Regex(@"^\d$");
         private HashSet<string> flag = new HashSet<string>();
-        public bool IsValidSudoku(char[][] board)
+        public bool IsValidSudoku2(char[][] board)
         {
             //Check all the way down, and all the way right for a match. 
             for (int i = 0; i < board.Length; i++)
@@ -804,7 +804,7 @@ namespace LeetCode_Reverse_Engineering
                             }
                             horizontal++;
                         }
-                        
+
 
                     }
                 }
@@ -814,7 +814,197 @@ namespace LeetCode_Reverse_Engineering
         }
 
 
+        private HashSet<char> checkBlock = new HashSet<char>();
+        private HashSet<string> blockFlag = new HashSet<string>();
+        private int counter = 0;
+        public bool IsValidSudoku3(char[][] board)
+        {
+            //Check each block
+            for (int i = 0; i < board.Length; i++)
+            {
+                for (int k = 0; k < board[i].Length; k++)
+                {
+                    counter++;
+                    if (char.IsNumber(board[i][k]))
+                    {
+                        int vertical = i / 3;
+                        vertical *= 3;
+                        int horizontal = k / 3;
+                        horizontal *= 3;
+
+                        if (blockFlag.Add("v" + vertical.ToString() + "h" + horizontal.ToString()))
+                        {
+                            for (int verticalTest = vertical; verticalTest < vertical + 3; verticalTest++)
+                            {
+                                for (int horizontalTest = horizontal; horizontalTest < horizontal + 3; horizontalTest++)
+                                {
+                                    if (board[verticalTest][horizontalTest] == '.') continue;
+                                    if (char.IsNumber(board[verticalTest][horizontalTest]) && !checkBlock.Add(board[verticalTest][horizontalTest])) return false;
+                                    flag.Add(verticalTest.ToString() + horizontalTest.ToString() + board[verticalTest][horizontalTest].ToString());
+                                }
+                            }
+                            checkBlock.Clear();
+                            k += 3;
+                        }
+                    }
+                }
+            }
+            Console.WriteLine("times run {0}",counter);
+
+            for (int i = 0; i < board.Length; i++)
+            {
+                for (int k = 0; k < board[i].Length; k++)
+                {
+                    if (char.IsNumber(board[i][k]))
+                    {
+                        // test vertically
+                        int vertical = 0;
+                        while (vertical < board.Length)
+                        {
+                            if (board[vertical][k] == '.')
+                            {
+                                vertical++;
+                                continue;
+                            }
+                            if (i != vertical && flag.Contains(vertical.ToString() + k.ToString() + board[i][k].ToString()))
+                            {
+                                return false;
+                            }
+                            vertical++;
+                        }
+                        // test horizontally
+                        int horizontal = 0;
+                        while (horizontal < board[i].Length)
+                        {
+                            if (board[i][horizontal] == '.')
+                            {
+                                horizontal++;
+                                continue;
+                            }
+                            if (k != horizontal && flag.Contains(i.ToString() + horizontal.ToString() + board[i][k].ToString()))
+                            {
+                                return false;
+                            }
+                            horizontal++;
+                        }
+                    }
+                }
+            }
+
+            foreach (var key in blockFlag) Console.WriteLine(key);
+
+            return true;
+        }
+
+
+        private Dictionary<char, List<List<int>>> dict = new Dictionary<char, List<List<int>>>();
+        public bool IsValidSudoku4(char[][] board)
+        {
+            //Check each block
+            for (int i = 0; i < board.Length; i += 3)
+            {
+                for (int k = 0; k < board[i].Length; k += 3)
+                {
+                    int vertical = i / 3;
+                    vertical *= 3;
+                    int horizontal = k / 3;
+                    horizontal *= 3;
+
+                    if (blockFlag.Add("v" + vertical.ToString() + "h" + horizontal.ToString()))
+                    {
+                        for (int verticalTest = vertical; verticalTest < vertical + 3; verticalTest++)
+                        {
+                            for (int horizontalTest = horizontal; horizontalTest < horizontal + 3; horizontalTest++)
+                            {
+                                if (board[verticalTest][horizontalTest] == '.') continue;
+                                if (char.IsNumber(board[verticalTest][horizontalTest]) && !checkBlock.Add(board[verticalTest][horizontalTest])) return false;
+                                flag.Add(verticalTest.ToString() + horizontalTest.ToString() + board[verticalTest][horizontalTest].ToString());
+                                
+                            }
+                        }
+                        checkBlock.Clear();
+                    }
+                }
+            }
+            foreach (var key in flag)
+            {
+                int vertical = Convert.ToInt32(key[0].ToString());
+                int horizontal = Convert.ToInt32(key[1].ToString());
+                int value = key[2];
+
+                int verticalCheck = 0;
+                int horizontalCheck = 0;
+                while (verticalCheck < 9)
+                {
+                    
+                    if (vertical != verticalCheck && board[verticalCheck][horizontal] == value) return false;
+                    verticalCheck++;
+                }
+
+                while (horizontalCheck < 9)
+                {
+                    if (horizontal != horizontalCheck && board[vertical][horizontalCheck] == value) return false;
+                    horizontalCheck++;
+                }
+
+            }
+
+            return true;
+        }
+
+
+        public bool IsValidSudoku(char[][] board)
+        {
+            HashSet<char> checkBlock = new HashSet<char>();
+            HashSet<string> blockFlag = new HashSet<string>();
+            Dictionary<char, List<List<int>>> dict = new Dictionary<char, List<List<int>>>();
+            HashSet<int> verticalSet = new HashSet<int>();
+            HashSet<int> horizontalSet = new HashSet<int>();
+
+            //Check each block
+            for (int i = 0; i < board.Length; i += 3)
+            {
+                for (int k = 0; k < board[i].Length; k += 3)
+                {
+                    int vertical = i;
+                    int horizontal = k;
+
+                    if (blockFlag.Add("v" + vertical.ToString() + "h" + horizontal.ToString()))
+                    {
+                        for (int verticalTest = vertical; verticalTest < vertical + 3; verticalTest++)
+                        {
+                            for (int horizontalTest = horizontal; horizontalTest < horizontal + 3; horizontalTest++)
+                            {
+                                if (board[verticalTest][horizontalTest] == '.') continue;
+                                if (char.IsNumber(board[verticalTest][horizontalTest]) && !checkBlock.Add(board[verticalTest][horizontalTest])) return false;
+                                if (!dict.TryAdd(board[verticalTest][horizontalTest], new List<List<int>>() {new List<int>() {verticalTest, horizontalTest}}))
+                                {
+                                    dict[board[verticalTest][horizontalTest]].Add(new List<int>() { verticalTest, horizontalTest });
+                                }
+                            }
+                        }
+                        checkBlock.Clear();
+                    }
+                }
+            }
+            
+
+            foreach (var key in dict)
+            {
+                foreach (var item in key.Value)
+                {
+                    if (!verticalSet.Add(item[0])) return false;
+                    if (!horizontalSet.Add(item[1])) return false;
+                }
+                verticalSet.Clear();
+                horizontalSet.Clear();
+            }
+
+            return true;
+        }
+
         
+
 
 
 
