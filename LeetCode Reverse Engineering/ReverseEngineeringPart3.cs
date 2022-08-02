@@ -101,5 +101,184 @@ namespace LeetCode_Reverse_Engineering
         }
 
 
+
+
+
+
+
+
+
+
+
+
+
+        public void Rotate2(int[][] matrix)
+        {
+            List<int> rightValues = new List<int>();
+            List<int> topValues = new List<int>();
+            List<int> bottomValues = new List<int>();
+            List<int> leftValues = new List<int>();
+
+            int top = 0;
+            int right = matrix[top].Length - 1;
+            int bottom = matrix.Length - 1;
+            int left = 0;
+
+
+
+            while(top <= bottom)
+            {
+                for (int vertical = top; vertical <= right; vertical++)
+                {
+                    rightValues.Add(matrix[vertical][right]);
+                }
+
+                for (int horizontal = left; horizontal <= bottom; horizontal++)
+                {
+                    topValues.Add(matrix[top][horizontal]);
+                }
+
+                for (int horizontal = left; horizontal <= bottom; horizontal++)
+                {
+                    bottomValues.Add(matrix[bottom][horizontal]);
+                }
+
+                for (int vertical = top; vertical <= right; vertical++)
+                {
+                    leftValues.Add(matrix[vertical][left]);
+                }
+
+                //Add all top values to the right
+                for (int vertical = top ; vertical <= right; vertical++)
+                {
+                    matrix[vertical][right] = topValues[vertical - top];
+                }
+
+                //Add all right values to the bottom, which needs to be done in reverse order.
+                for (int horizontal = left; horizontal <= right; horizontal++)
+                {
+                    matrix[bottom][horizontal] = rightValues[right - horizontal];
+                }
+
+                //Add all bottom values to the left
+                for (int vertical = top; vertical <= right; vertical++)
+                {
+                    matrix[vertical][left] = bottomValues[vertical - top];
+                }
+
+                //Add all left values to the top, which needs to be done in reverse order.
+                for (int horizontal = left; horizontal <= right; horizontal++)
+                {
+                    matrix[top][horizontal] = leftValues[right - horizontal];
+                }
+
+                rightValues.Clear();
+                bottomValues.Clear();
+                leftValues.Clear();
+                topValues.Clear();
+
+                right--;
+                bottom--;
+                top++;
+                left++;
+
+            }
+        }
+
+        public void Rotate5(int[][] matrix)
+        {
+            int top = 0;
+            int right = matrix[top].Length - 1;
+            int bottom = matrix.Length - 1;
+            int left = 0;
+
+            while (top <= bottom)
+            {
+                
+                //The counter allows us to iterate through each inner layer. 
+                int counter = 0;
+                for (int i = top; i < right; i++)
+                {
+                    //top left becomes bottom left
+                    //top right becomes top left
+                    //bottom right becomes top right
+                    //bottom left becomes bottom right
+                    (matrix[top][left + counter], matrix[top + counter][right], matrix[bottom][right - counter], matrix[bottom - counter][left]) = (matrix[bottom - counter][left], matrix[top][left + counter], matrix[top + counter][right], matrix[bottom][right - counter]);
+                    //Since we change them all at the same time, we just spin around the matrix with the counter. 
+                    counter++;
+                }
+                //The for loop stops once all 4 sides are changed.
+                //Then we go to the inner layer and do it again. 
+                top++;
+                bottom--;
+                left++;
+                right--;
+            }
+        }
+
+
+        public void Rotate3(int[][] matrix)
+        {
+            int top = 0;
+            int right = matrix[top].Length - 1;
+            int bottom = matrix.Length - 1;
+            int left = 0;
+
+            RecurseRotate(matrix, top, right, bottom, left);
+        }
+
+        private void RecurseRotate(int[][] matrix, int top, int right, int bottom, int left)
+        {
+
+            if (top > bottom) return;
+            if (top <= bottom) RecurseRotate(matrix, top + 1, right - 1, bottom - 1, left + 1);
+
+            int counter = 0;
+                for (int i = top; i < right; i++)
+                {
+                    (matrix[top][left + counter], matrix[top + counter][right], matrix[bottom][right - counter], matrix[bottom - counter][left]) = (matrix[bottom - counter][left], matrix[top][left + counter], matrix[top + counter][right], matrix[bottom][right - counter]);
+                    counter++;
+                }
+            return;
+        }
+
+
+
+
+        public void Rotate(int[][] matrix)
+        {
+            if (matrix == null) return;
+
+            int low = 0;
+            int high = matrix[0].Length - 1;
+
+            while (high > low)
+            {
+                for (int i = 0; i <= high - low - 1; i++)
+                {
+                    int temp1 = matrix[low + i][high];
+                    matrix[low + i][high] = matrix[low][low + i];
+
+                    int temp2 = matrix[high][high - i];
+                    matrix[high][high - i] = temp1;
+
+                    temp1 = matrix[high - i][low];
+                    matrix[high - i][low] = temp2;
+
+                    matrix[low][low + i] = temp1;
+                }
+
+                low++;
+                high--;
+            }
+        }
+
+
+
+
+
+
+
+
     }
 }
