@@ -276,9 +276,112 @@ namespace LeetCode_Reverse_Engineering
 
 
 
+        //BFS solution
+        public bool IsSameTree2(TreeNode p, TreeNode q)
+        {
+            //PreCheck to make sure p and q are worth traversing.
+            if (p == null && q == null) return true;
+            if (p == null && q != null || (p != null && q == null) || (p.val != q.val)) return false;
+
+            //Queues so we can traverse both with BFS
+            Queue<TreeNode> queue1 = new Queue<TreeNode>();
+            Queue<TreeNode> queue2 = new Queue<TreeNode>();
+            //Initializing the queues.
+            queue1.Enqueue(p);
+            queue2.Enqueue(q);
+
+            //Temp nodes to traverse both trees
+            TreeNode node1;
+            TreeNode node2;
+
+            //We try to dequeue, if nothing is in the queue then the while loop stops.
+            //Otherwise, node1 becomes the Dequeued element.
+            while (queue1.TryDequeue(out node1))
+            {
+                //If this fails to dequeue, then we return false because the both trees aren't equal. 
+                if(!queue2.TryDequeue(out node2)) return false;
+                //Null checks to make sure we have real values to continue wiht. 
+                if (node1 == null && node2 != null || (node2 == null && node1 != null)) return false;
+
+                if (node1 != null && node2 != null)
+                {
+                    //Make sure both values are the same.
+                    if (node1.val != node2.val) return false;
+                    //Setting up the next layer to be traversed
+                    queue1.Enqueue(node1.left);
+                    queue1.Enqueue(node1.right);
+
+                    queue2.Enqueue(node2.left);
+                    queue2.Enqueue(node2.right);
+                    
+                }
+            }
+
+            return true;
+        }
 
 
 
 
+        //DFS PreOrder solution
+        public bool IsSameTree(TreeNode p, TreeNode q)
+        {
+            //Initial null checks
+            if (q == null && p != null) return false;
+            if (p == null && q != null) return false;
+
+            //Verify one of the nodes exist to traverse
+            if (p != null || q != null)
+            {
+                //If one left node doesn't equal the other, return false.
+                if (p.val != q.val) return false;
+                //Otherwise keep going down left
+                if (!IsSameTree(p.left, q.left)) return false;
+            }
+            
+            //Verify one of the nodes exists to traverse
+            if (p != null || q != null)
+            {
+                //Verify the nodes are equal, otherwise return false. 
+                if (p.val != q.val) return false;
+                //Keep going right.
+                if (!IsSameTree(p.right, q.right)) return false;
+            }
+
+            return true;
+        }
+
+        //Cool solution from leetcode
+        /*public bool IsSameTree(TreeNode p, TreeNode q)
+        {
+            if (Equals(p, null) || Equals(q, null))
+                return Equals(q, p);
+            return Equals(p.val, q.val) && IsSameTree(p.left, q.left) && IsSameTree(p.right, q.right);
+        }*/
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    public class TreeNode
+    {
+        public int val;
+        public TreeNode left;
+        public TreeNode right;
+        public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+        {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
     }
 }
