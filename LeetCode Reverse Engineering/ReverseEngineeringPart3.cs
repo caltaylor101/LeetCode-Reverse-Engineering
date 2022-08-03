@@ -369,6 +369,159 @@ namespace LeetCode_Reverse_Engineering
 
 
 
+        /*public bool IsSymmetric(TreeNode root)
+        {
+            Queue<TreeNode> leftq = new Queue<TreeNode>();
+            Stack<TreeNode> rightq = new Stack<TreeNode>();
+
+            if (Equals(root.left, null) && Equals(root.right, null)) return true;
+            if (Equals(root.left, null) || Equals(root.right, null))
+            {
+                if (!Equals(root.left, root.right)) return false;
+            }
+            if (!Equals(root.left.val, root.right.val)) return false;
+
+            leftq.Enqueue(root.left);
+            rightq.Push(root.right);
+
+            TreeNode currentLeft;
+            TreeNode currentRight;
+
+            while(leftq.TryDequeue(out currentLeft))
+            {
+                if(!rightq.TryPop(out currentRight)) return false;
+
+                if(Equals(currentLeft, null) && !Equals(currentRight, null)) return false;
+                if(!Equals(currentLeft, null) && Equals(currentRight, null)) return false;
+                if(Equals(currentLeft.left, null) || Equals(currentRight.right, null))
+                {
+                    if (!Equals(currentLeft.left, currentRight.right)) return false;
+                }
+                if(Equals(currentLeft.right, null) || Equals(currentRight.left, null))
+                {
+                    if (!Equals(currentLeft.right, currentRight.left)) return false;
+                }
+
+                try
+                {
+                    leftq.Enqueue(currentLeft.left);
+                    rightq.Push(currentRight.right);
+                    if (!Equals(currentLeft.left.val, currentRight.right.val)) return false;
+                }
+                catch
+                {
+                    if (!Equals(currentLeft.left, currentRight.right)) return false;
+                }
+
+                try
+                {
+                    leftq.Enqueue(currentLeft.right);
+                    rightq.Push(currentRight.left);
+                    if (!Equals(currentLeft.right.val, currentRight.left.val)) return false;
+                }
+                catch
+                {
+                    if (!Equals(currentLeft.right, currentRight.left)) return false;
+                }
+
+            }
+
+            return true;
+        }*/
+
+
+
+
+
+
+
+
+
+
+        public bool IsSymmetric2(TreeNode root)
+        {
+            //Queues to initialize the left and right branch traversals
+            Queue<TreeNode> leftQ = new Queue<TreeNode>();
+            Queue<TreeNode> rightQ = new Queue<TreeNode>();
+
+            //null check to make sure we should continue
+            if(Equals(root.left, null) || Equals(root.right, null))
+            {
+                if (!Equals(root.left, root.right)) return false;
+            }
+
+            //Initializing our queues.
+            leftQ.Enqueue(root.left);
+            rightQ.Enqueue(root.right);
+
+            //Node variables to dequeue to.
+            TreeNode currentLeft;
+            TreeNode currentRight;
+
+            //While leftQ can Dequeue something, which becomes the variable currentLeft.
+            //If our Queue is empty, then this while loop ends.
+            while (leftQ.TryDequeue(out currentLeft))
+            {
+                //If the right queue is empty, then they are not equal. 
+                if (!rightQ.TryDequeue(out currentRight)) return false;
+                //If both nodes are null, continue from the beginning of the loop. 
+                if (Equals(currentLeft, null) && Equals(currentRight, null)) continue;
+
+                //Null checks for both right and left.
+                if (Equals(currentLeft.left, null) || Equals(currentRight.right, null))
+                {
+                    if (!Equals(currentLeft.left, currentRight.right)) return false;
+                }
+                if (Equals(currentLeft.right, null) || Equals(currentRight.left, null))
+                {
+                    if (!Equals(currentLeft.right, currentRight.left)) return false;
+                }
+
+                //Check values to make sure the equal.
+                if (!Equals(currentLeft.val, currentRight.val)) return false;
+
+
+                // After all our checks we add the left and right branches to our queues.
+                // Left to right on the left queue
+                // Right to left on the right queue
+                leftQ.Enqueue(currentLeft.left);
+                leftQ.Enqueue(currentLeft.right);
+
+                rightQ.Enqueue(currentRight.right);
+                rightQ.Enqueue(currentRight.left);
+            }
+
+            return true;
+        }
+
+        public bool IsSymmetric(TreeNode root)
+        {
+            return RecurseSymmetric(root.left, root.right);
+        }
+
+        public bool RecurseSymmetric(TreeNode left, TreeNode right)
+        {
+            //The checks to make sure each node is correct. 
+            //Null checks are done first so the left.val and right.val doesn't error out.
+            if (Equals(left, null) && Equals(right, null)) return true;
+            if (Equals(left, null) || Equals(right, null)) return false;
+            if (left.val != right.val) return false;
+
+            //Check the left.left with the right.right
+            if (!RecurseSymmetric(left.left, right.right)) return false;
+            //Check the left.right with the right.left
+            if (!RecurseSymmetric(left.right, right.left)) return false;
+
+            //Otherwise return true
+            return true;
+        }
+
+
+
+
+
+
+
 
     }
 
