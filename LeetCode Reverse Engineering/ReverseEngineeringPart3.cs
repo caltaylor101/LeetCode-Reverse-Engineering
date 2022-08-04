@@ -703,6 +703,240 @@ namespace LeetCode_Reverse_Engineering
 
 
 
+
+
+
+
+
+        public bool IsPalindrome2(string s)
+        {
+            //Create 2 objects to compare to.
+            StringBuilder lettersInOrder = new StringBuilder();
+            StringBuilder reverseLetters = new StringBuilder();
+
+            //Have an endIndex reference to move backwards on.
+            int endIndex = s.Length - 1;
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                //Add to one StringBuilder if we know the char is a letter or number
+                if(char.IsLetter(s[i]) || char.IsNumber(s[i]))
+                {
+                    //Converting ToLower and adding it to the stringbuilder
+                    lettersInOrder.Append(char.ToLower(s[i]));
+                }
+                //Add to the other StringBuilder if we know the char is a letter or number
+                if (char.IsLetter(s[endIndex - i]) || char.IsNumber(s[endIndex - i]))
+                {
+                    //Converting it to lower and adding it to the reverseLetters.
+                    reverseLetters.Append(char.ToLower(s[endIndex - i]));
+                }
+            }
+
+            //Convert them to string and returning false if they don't equal
+            if (lettersInOrder.ToString() != reverseLetters.ToString()) return false;
+
+            //Otherwise we return true.
+            return true;
+        }
+
+
+        public bool IsPalindrome(string s)
+        {
+            //Right pointer initialization
+            int right = s.Length - 1;
+            //Left pointer initialization.
+            int left = 0;
+
+            //While they don't equal, continue.
+            while (left < right)
+            {
+                //We need to make sure that we don't get stuck in a loop in the scenario there are only non-letter/non-number values.
+                //left < right makes sure we don't go too far and break our index. 
+                //The left side will continue till it finds a number or letter.
+                while (left < right && !char.IsLetter(s[left]) && !char.IsNumber(s[left]))
+                {
+                    left++;
+                }
+                //The right side does the same thing, continues till we find a number or letter.
+                while (left < right && !char.IsLetter(s[right]) && !char.IsNumber(s[right]))
+                {
+                    right--;
+                }
+                //If they don't equal, we return false.
+                if (char.ToLower(s[left]) != char.ToLower(s[right])) return false;
+
+                //Go to the next letters to compare
+                left++;
+                right--;
+            }
+
+            //Return true if we make it through the string.
+            return true;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public bool HasCycle2(ListNode head)
+        {
+            HashSet<ListNode> set = new HashSet<ListNode>();
+
+            while (head != null)
+            {
+                //HashSet.Add() returns a boolean
+                //If we can't add head, that means it already exists and we return true.
+                if (!set.Add(head)) return true;
+                head = head.next;
+            }
+
+            return false;
+        }
+
+        public bool HasCycle3(ListNode head)
+        {
+            //Null check
+            if (head == null) return false;
+            //Initialize a followhead
+            ListNode followHead = head;
+            head = head.next;
+            //counters to increment the follow head going behind by.
+            int lastCount = 1;
+            int count = 0;
+            while (head != null)
+            {
+                //The followHead moves after count reaches the next last count.
+                //I thought having a slow head moving would help us find the duplicate.
+                if(count > lastCount)
+                {
+                    followHead = followHead.next;
+                    lastCount = count;
+                    count = 0;
+                }
+
+                if (followHead == head) return true;
+                head = head.next;
+                count++;
+            }
+
+            return false;
+        }
+
+        public bool HasCycle(ListNode head)
+        {
+            //Initialize a follower head
+            ListNode followHead = head;
+
+            while (head != null)
+            {
+                //Try moving head up ahead. If it fails then return false.
+                try
+                {
+                    //This can be modified any number of times.
+                    //I got a run of 110ms with 11 nexts after head, which could have just been lucky.
+                    head = head.next.next;
+                }
+                catch
+                {
+                    return false;
+                }
+                followHead = followHead.next;
+                if (head == followHead) return true;
+            }
+
+            //This will only get hit in the scenario that we get a null head.
+            return false;
+        }
+
+        //A = 1
+        //AA = 27
+        //BAA = 703
+        //AAAA = 18279
+        //AAAAA = 475255
+
+        //1 + 26 + (26*26) + (26*26*26)
+
+        public int TitleToNumber2(string columnTitle)
+        {
+            //Initialize the alpha char array.
+            //It has a space in the beginning so that A can be counted as 1, and so on.
+            char[] alpha = " ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+
+            //Initialize start variables for a while loop. 
+            //A for loop could probably used as well. 
+            int titleLength = columnTitle.Length - 1;
+            int index = 0;
+            int sum = 0;
+
+            while(titleLength >= 0)
+            {
+                //Get the current character that we are checking from the string provided.
+                char currentChar = columnTitle[index];
+
+                //Find what place it is in the index, and return that index. 
+                //The first parameter is the array to check, and the second parameter is a predicate. 
+                //The predicate basically says:
+                //foreach (var alphaChar in alpha)
+                //{
+                //if (alphaChar == currentChar) multiple = IndexOf(alphaChar);
+                //}
+                int multiple = Array.FindIndex(alpha, alphaChar => alphaChar == currentChar);
+                //We multiple 26 to the power of our titleLength, then multiply it by the letter we are on.
+                sum += (int)Math.Pow(26, titleLength) * multiple;
+
+                //increase/decrease our variables and continue.
+                titleLength--;
+                index++;
+            }
+
+            //return the end sum.
+            return sum;
+        }
+        public int TitleToNumber(string columnTitle)
+        {
+            //Initialize start variables for a while loop. 
+            //A for loop could probably used as well. 
+            int titleLength = columnTitle.Length - 1;
+            int index = 0;
+            int sum = 0;
+
+            while(titleLength >= 0)
+            {
+                //Get the current character that we are checking from the string provided.
+                //Every character is represented by a number in C#
+                //A-Z falls between 65 and 90, so we can make our multiple equal the character - 64.
+                sum += (int)Math.Pow(26, titleLength) * (columnTitle[index] - 64);
+                //increase/decrease our variables and continue.
+                titleLength--;
+                index++;
+            }
+            //return the end sum.
+            return sum;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     public class TreeNode
