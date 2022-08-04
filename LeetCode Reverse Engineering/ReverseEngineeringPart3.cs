@@ -445,10 +445,8 @@ namespace LeetCode_Reverse_Engineering
             Queue<TreeNode> rightQ = new Queue<TreeNode>();
 
             //null check to make sure we should continue
-            if(Equals(root.left, null) || Equals(root.right, null))
-            {
-                if (!Equals(root.left, root.right)) return false;
-            }
+            if (Equals(root.left, null) && Equals(root.right, null)) return true;
+            if (Equals(root.left, null) || Equals(root.right, null)) return false;
 
             //Initializing our queues.
             leftQ.Enqueue(root.left);
@@ -466,20 +464,10 @@ namespace LeetCode_Reverse_Engineering
                 if (!rightQ.TryDequeue(out currentRight)) return false;
                 //If both nodes are null, continue from the beginning of the loop. 
                 if (Equals(currentLeft, null) && Equals(currentRight, null)) continue;
-
-                //Null checks for both right and left.
-                if (Equals(currentLeft.left, null) || Equals(currentRight.right, null))
-                {
-                    if (!Equals(currentLeft.left, currentRight.right)) return false;
-                }
-                if (Equals(currentLeft.right, null) || Equals(currentRight.left, null))
-                {
-                    if (!Equals(currentLeft.right, currentRight.left)) return false;
-                }
-
-                //Check values to make sure the equal.
+                //If one node is null then the tree is false
+                if (Equals(currentLeft, null) || Equals(currentRight, null)) return false;
+                //Since we did the null checks above, we can check the left and right value here.
                 if (!Equals(currentLeft.val, currentRight.val)) return false;
-
 
                 // After all our checks we add the left and right branches to our queues.
                 // Left to right on the left queue
