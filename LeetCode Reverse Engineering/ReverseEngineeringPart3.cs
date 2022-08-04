@@ -511,6 +511,108 @@ namespace LeetCode_Reverse_Engineering
 
 
 
+
+        //100% less memory
+        //outer variable that the recursive function updates
+        private int maxDepth = 0;
+        public int MaxDepth2(TreeNode root)
+        {
+            //null check
+            if (root == null) return 0;
+
+            //Returns the maxDepth variable
+            return RecurseDepth(root, 1); 
+        }
+
+        private int RecurseDepth(TreeNode root, int count)
+        {
+            if (root.left != null)
+            {
+                //Keep moving left and keep track of the count as you go
+                RecurseDepth(root.left, count + 1);
+            }
+
+            if (root.right != null)
+            {
+                //Keep moving right and keep track of the count as you go
+                RecurseDepth(root.right, count + 1);
+            }
+
+            //If maxDepth is lower than count, maxDepth = count. 
+            return maxDepth = Math.Max(count, maxDepth); 
+        }
+
+        public int MaxDepth(TreeNode root)
+        {
+            //Null check
+            if (root == null) return 0;
+            //2 layers to count and traverse down the tree
+            Queue<TreeNode> layer1 = new Queue<TreeNode>();
+            Queue<TreeNode> layer2 = new Queue<TreeNode>();
+
+            //Booleans to switch between Queue layers
+            bool checkLayer1 = true;
+            bool checkLayer2 = false;
+
+            //Initializing the traversal. 
+            layer1.Enqueue(root);
+
+            //A node that can traverse down the tree
+            TreeNode currentNode = null;
+
+            //Initializing the count for what to return.
+            int maxDepth = 1;
+
+            while(layer1.Count > 0 || layer2.Count > 0)
+            {
+                //If checkLayer1 is true and layer1 Queue is empty
+                if (checkLayer1 && !layer1.TryDequeue(out currentNode))
+                {
+                    //Count maxDepth
+                    maxDepth++;
+                    //Flip the boolean triggers
+                    checkLayer1 = false;
+                    checkLayer2 = true;
+                    //Restart the loop because currentNode is currently null
+                    continue;
+                }
+                //Otherwise, if checkLayer2 is true and layer2 Queue is empty, flip the boolean triggers
+                if (checkLayer2 && !layer2.TryDequeue(out currentNode))
+                {
+                    maxDepth++;
+                    checkLayer1 = true;
+                    checkLayer2 = false;
+                    //Restart the loop because currentNode is currently null
+                    continue;
+                }
+
+                //If we are currently checking layer1, then we want to add the next layer to layer2 
+                if (checkLayer1)
+                {
+                    //null checks before adding the node
+                    if (currentNode.left != null) layer2.Enqueue(currentNode.left);
+                    if (currentNode.right != null) layer2.Enqueue(currentNode.right);
+                }
+
+                //If we are currently checking layer2, then we want to add the next layer to layer1
+                if (checkLayer2)
+                {
+                    //null checks before adding the node
+                    if (currentNode.left != null) layer1.Enqueue(currentNode.left);
+                    if (currentNode.right != null) layer1.Enqueue(currentNode.right);
+                }
+
+            }
+
+            //Return the maxDepth.
+            return maxDepth;
+        }
+
+
+
+
+
+
     }
 
     public class TreeNode
