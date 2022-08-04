@@ -662,6 +662,37 @@ namespace LeetCode_Reverse_Engineering
 
 
 
+        public IList<IList<int>> Generate(int numRows)
+        {
+            List<IList<int>> triangle = new List<IList<int>>();
+            triangle.Add(new List<int>() { 1 });
+            if (numRows == 1) return triangle;
+
+            triangle.Add(new List<int>() { 1, 1 });
+            if (numRows == 2) return triangle;
+
+
+            while (numRows > 2)
+            {
+                List<int> pascal = new List<int>() { 1 };
+                IList<int> lastList = triangle[triangle.Count - 1];
+                for (int i = 0; i < lastList.Count; i++)
+                {
+                    if (i + 1 < triangle[triangle.Count - 1].Count)
+                    {
+                        pascal.Add(lastList[i] + lastList[i + 1]);
+                    }
+                }
+                pascal.Add(1);
+                triangle.Add(pascal);
+                numRows--;
+            }
+
+            return triangle;
+        }
+
+
+
 
 
 
