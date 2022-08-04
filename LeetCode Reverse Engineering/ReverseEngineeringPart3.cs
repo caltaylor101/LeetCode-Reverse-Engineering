@@ -661,30 +661,35 @@ namespace LeetCode_Reverse_Engineering
 
 
 
-
         public IList<IList<int>> Generate(int numRows)
         {
-            List<IList<int>> triangle = new List<IList<int>>();
-            triangle.Add(new List<int>() { 1 });
+            //Initialize the list with the first row.
+            List<IList<int>> triangle = new List<IList<int>>() { new List<int>() { 1 } };
+            //Return the first row if numRows is 1.
             if (numRows == 1) return triangle;
 
-            triangle.Add(new List<int>() { 1, 1 });
-            if (numRows == 2) return triangle;
-
-
-            while (numRows > 2)
+            //Continue this loop till we get to 1
+            while (numRows > 1)
             {
-                List<int> pascal = new List<int>() { 1 };
-                IList<int> lastList = triangle[triangle.Count - 1];
-                for (int i = 0; i < lastList.Count; i++)
+                //Initialize the next row with 1, since every row starts with 1.
+                List<int> nextRow = new List<int>() { 1 };
+
+                //Get the last row of the triangle
+                IList<int> lastRow = triangle[triangle.Count - 1];
+
+                //Loop through the length of the last row.
+                //We - 1 from the count because we are adding i+1 below.
+                for (int i = 0; i < lastRow.Count - 1; i++)
                 {
-                    if (i + 1 < triangle[triangle.Count - 1].Count)
-                    {
-                        pascal.Add(lastList[i] + lastList[i + 1]);
-                    }
+                    //Add the upper two elements from the last row, and add them to the next row.
+                        nextRow.Add(lastRow[i] + lastRow[i + 1]);
                 }
-                pascal.Add(1);
-                triangle.Add(pascal);
+
+                //Every row ends with 1.
+                nextRow.Add(1);
+                //Add the row to the triangle.
+                triangle.Add(nextRow);
+                //Decrease numRows and continue.
                 numRows--;
             }
 
