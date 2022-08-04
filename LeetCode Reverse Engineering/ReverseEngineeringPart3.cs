@@ -613,6 +613,60 @@ namespace LeetCode_Reverse_Engineering
 
 
 
+
+
+
+
+
+        public TreeNode SortedArrayToBST(int[] nums)
+        {
+            //Return the recursive function.
+            return RecurseBST(nums, 0, nums.Length - 1);
+        }
+
+        public TreeNode RecurseBST(int[] nums, int left, int right)
+        {
+            //If left crosses right return null;
+            if (left > right) return null;
+            //Calculate the mid
+            int mid = (left + right) / 2;
+            //The left side will always be to the left of mid. 
+            //The right side is always to the right of mid. 
+            //So we calculate the mid, and keep calculating the mid as far left as we can.
+            //Then as far right as we can, and assign the nodes as we go. 
+            TreeNode node = new TreeNode(nums[mid], RecurseBST(nums, left, mid - 1), RecurseBST(nums, mid + 1, right));
+            return node;
+        }
+        public TreeNode RecurseBST2(int[] nums, int left, int right)
+        {
+            //If left crosses right return null;
+            if (left > right) return null;
+            //Calculate the mid
+            int mid = (left + right) / 2;
+            //The left side will always be to the left of mid. 
+            //The right side is always to the right of mid. 
+            //So we calculate the mid, and keep calculating the mid as far left as we can.
+            //Then as far right as we can, and assign the nodes as we go. 
+            TreeNode node = new TreeNode(nums[mid]);
+            node.left = RecurseBST(nums, left, mid - 1);
+            node.right = RecurseBST(nums, mid + 1, right);
+            return node;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     public class TreeNode
