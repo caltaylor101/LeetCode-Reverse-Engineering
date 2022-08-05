@@ -931,7 +931,185 @@ namespace LeetCode_Reverse_Engineering
 
 
 
+        public bool IsHappy(int n)
+        {
+            if (n == 1) return true;
+            HashSet<int> sumSet = new HashSet<int>();
+            //Convert n to a string so that it is in an array that can be looped.
+            string nString = n.ToString();
+            int sum = 0;
 
+            //While we have something in our string, keep looping.
+            while (nString.Length != 0)
+            {
+                //For each character in the string.
+                foreach (var c in nString)
+                {
+                    //We convert the character back to an integer, then add the square to the sum.
+                    sum += (int)Math.Pow(Convert.ToInt32(c.ToString()), 2);
+                }
+                //Add the sum to the sumSet.
+                //This function returns a boolean, so if it fails to add the sum, return false.
+                if (!sumSet.Add(sum)) return false;
+                //If sum is 1 then return true. It is happy!
+                if (sum == 1) return true;
+                //Set our sum to the nString
+                nString = sum.ToString();
+                //Reset our sum integer
+                sum = 0;
+            }
+
+            //Because the outside possibility that n could be null or 0, we return false.
+            //This doesn't get hit with this function or under these constraints. 
+            return false;
+        }
+
+
+
+
+
+
+
+
+
+        public bool IsPalindrome2(ListNode head)
+        {
+            List<int> nodeVals = new List<int>();
+
+            //Add all values of the linked list to a list of ints.
+            while (head != null)
+            {
+                nodeVals.Add(head.val);
+                head = head.next;
+            }
+
+            //left pointer
+            int index = 0;
+            //right pointer
+            int nodeCount = nodeVals.Count - 1;
+            while (index < nodeCount)
+            {
+                //verify that they equal
+                if (nodeVals[index] != nodeVals[nodeCount]) return false;
+                index++;
+                nodeCount--;
+            }
+
+            return true;
+        }
+
+        public bool IsPalindrome3(ListNode head)
+        {
+            ListNode runner = head;
+            ListNode follower = head;
+
+            //Find the middle of the linked list.
+            while (runner != null)
+            {
+                try
+                {
+                    runner = runner.next.next;
+                }
+                catch
+                {
+                    runner = runner.next;
+                    break;
+                }
+                follower = follower.next;
+            }
+
+            //Assign the middle node.
+            ListNode middle = follower;
+
+            //Reset the runner and follower to get ready for reversing half the list.
+            runner = head;
+            follower = null;
+            //Initialize a temporary node for storage when reversing the list.
+            ListNode tmpNode;
+            //Reverse the first half of the list. 
+            while(runner != middle)
+            {
+                //Save the runner.next variable to our temporary node.
+                tmpNode = runner.next;
+                //point the next variable to the follower
+                runner.next = follower;
+                //Make the follower the runner
+                follower = runner;
+                //Make the runner the reverseNode, which was the original next. 
+                if (tmpNode == middle) break;
+                runner = tmpNode;
+            }
+
+            //A trigger to give another move middle offset in the scenario of:
+            //[1,2,2,2,2,1] or [1,2,2,2,2,2,1]
+            //The runner on the second array would be index 2, and the middle would be 3. 
+            //So we would hit 1 == 2, and this trigger will check to see if middle.next will work once.
+            bool movedMiddle = false;
+            //Compare the first half and the second half from the middle.
+            while(runner != null || middle != null)
+            {
+                if (runner.val != middle.val && !movedMiddle)
+                {
+                    //set the offset for the scenario [1,2,2,2,1]
+                    if (middle.next != null) middle = middle.next;
+                    else return false;
+                    movedMiddle = true;
+                }
+                if (runner.val != middle.val && movedMiddle) return false;
+
+                runner = runner.next;
+                middle = middle.next;
+
+                //if one becomes null before the other, return false.
+                if ((middle == null || runner == null) && middle != runner) return false;
+            }
+
+            return true;
+        }
+
+
+        public bool IsPalindrome(ListNode head)
+        {
+            ListNode runner = head;
+            ListNode secondMiddle = head;
+            ListNode firstMiddle = null;
+            ListNode tmpNode = null;
+
+            //Find the middle of the linked list.
+            while (runner != null)
+            {
+                try
+                {
+                    runner = runner.next.next;
+                }
+                catch
+                {
+                    //secondMiddle is now in the middle. Move it up one when the catch block activates to account for the odd list.
+                    secondMiddle = secondMiddle.next;
+                    break;
+                }
+
+                //tmpNode is used to store secondMiddle.next, so that we can reverse the list and keep track of the next node.
+                tmpNode = secondMiddle.next;
+                secondMiddle.next = firstMiddle;
+                //firstMIddle becomes secondMiddle so that it can point every node we traverse through backwards.
+                firstMiddle = secondMiddle;
+                //Then we make secondMiddle the tmpNode, so we can continue moving forward.
+                secondMiddle = tmpNode;
+            }
+
+            //We only need to check if one is null, because both halves of our list should always be even from our Catch block
+            while (secondMiddle != null)
+            {
+                //Now we can check if each value is equal.
+                if (secondMiddle.val != firstMiddle.val) return false;
+
+                secondMiddle = secondMiddle.next;
+                firstMiddle = firstMiddle.next;
+            }
+
+            return true;
+        }
 
 
 
