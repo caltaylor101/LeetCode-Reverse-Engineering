@@ -54,5 +54,107 @@ public void DeleteNode2(ListNode node)
                 node = node.next;
             }
         }
+
+
+
+        public bool IsAnagram2(string s, string t)
+        {
+            //Put the characters in t to a list O(n)
+            List<char> tList = t.ToList();
+            //Sort the list O(n log n).
+            tList.Sort();
+            if (t.Length != s.Length) return false;
+
+            //Loop through the string O(n)
+            for(int i = 0; i < s.Length; i++)
+            {
+                //BinarySearch the list O(log n)
+                int index = tList.BinarySearch(s[i]);
+                //Binary search returns a negative index if it can't find it.
+                if (index < 0) return false;
+                //Remove the element O(n)
+                tList.RemoveAt(index);
+            }
+
+            return true;
+        }
+
+        public bool IsAnagram3(string s, string t)
+        {
+            if (s.Length != t.Length) return false;
+            Dictionary<int, int> tDict = new Dictionary<int, int>();
+            //Add each element of t (or s) into the dictionary.
+            foreach (var c in t)
+            {
+                //Try to add it, if it fails then it already exists,
+                //therefore we can add 1 to where it exists in the dictionary. 
+                if(!tDict.TryAdd(c, 1))
+                {
+                    tDict[c]++;
+                }
+            }
+
+            foreach (var c in s)
+            {
+                //Check every character to see if it exists in the dictionary.
+                if(tDict.ContainsKey(c))
+                {
+                    if (tDict[c] == 0) return false;
+                    //Remove a count of it. 
+                    tDict[c]--;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool IsAnagram4(string s, string t)
+        {
+            if (s.Length != t.Length) return false;
+            //Put both into a charArray
+            char[] sArray = s.ToCharArray();
+            char[] tArray = t.ToCharArray();
+            //Sort both arrays
+            Array.Sort(sArray);
+            Array.Sort(tArray);
+
+            for (int i = 0; i < sArray.Length; i++)
+            {
+                //Compare both arrays side by side
+                if (sArray[i] != tArray[i]) return false;
+            }
+
+            return true;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
