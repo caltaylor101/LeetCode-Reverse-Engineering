@@ -4,16 +4,23 @@ using System.Text;
 
 
 
-ReverseEngineeringPart3 engine = new ReverseEngineeringPart3();
+ReverseEngineeringPart4 engine = new ReverseEngineeringPart4();
 
-TreeNode node2 = new TreeNode(3);
-TreeNode node3 = new TreeNode(3);
-TreeNode node4 = new TreeNode(3);
-TreeNode node5 = new TreeNode(3, node4, node2);
-TreeNode node6 = new TreeNode(2, node5, node3);
 
-Console.WriteLine(engine.IsHappy(11));
 
+ListNode node1 = new ListNode(9);
+ListNode node2 = new ListNode(1, node1);
+ListNode node3 = new ListNode(5, node2);
+ListNode node4 = new ListNode(4, node3);
+
+
+engine.DeleteNode(node3);
+
+while (node4 != null)
+{
+    Console.WriteLine(node4.val);
+    node4 = node4.next;
+}
 
 
 
