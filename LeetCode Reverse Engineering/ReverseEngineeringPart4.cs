@@ -145,6 +145,185 @@ public void DeleteNode2(ListNode node)
 
 
 
+        public string ValidIPAddress2(string queryIP)
+        {
+            if (IsIPV4Address2(new string[] { queryIP })) return "IPv4";
+            if (IsIPV6Address2(new string[] { queryIP })) return "IPv6";
+            return "Neither";
+        }
+
+        public bool IsIPV4Address2(string[] lines)
+        {
+            var arr = new List<string>();
+            foreach (var line in lines)
+            {
+                arr = line.Split('.').ToList();
+                if (arr.Count != 4) return false;
+                foreach (var s in arr)
+                {
+                    if (s.Length == 0 || (s[0] == '0' && s.Length != 1)) return false;
+                    try
+                    {
+                        if (Convert.ToInt32(s) < 0 || Convert.ToInt32(s) > 255) return false;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        
+
+        public bool IsIPV6Address2(string[] lines)
+        {
+            var arr = new List<string>();
+            foreach (var line in lines)
+            {
+                arr = line.Split(':').ToList();
+                if (arr.Count != 8) return false;
+                foreach (var s in arr)
+                {
+                    if (s.Length <= 0 || s.Length > 4) return false;
+                    foreach (var c in s)
+                    {
+                        if (!((c >= 'a' && c <= 'f')
+                            ||
+                            (c >= 'A' && c <= 'F')
+                            ||
+                            (char.IsDigit(c)))) return false; 
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public void IsIPV4Address(string[] lines)
+        {
+            var arr = new List<string>();
+            foreach (var line in lines)
+            {
+                arr = line.Split('.').ToList();
+                if (arr.Count != 4)
+                {
+                    Console.WriteLine("Neither");
+                    continue;
+                }
+
+                foreach (var s in arr)
+                {
+                    if (s.Length == 0 || (s[0] == '0' && s.Length != 1))
+                    {
+                        Console.WriteLine("Neither");
+                        goto End;
+                    }
+
+                    try
+                    {
+                        if (Convert.ToInt32(s) < 0 || Convert.ToInt32(s) > 255)
+                        {
+                            Console.WriteLine("Neither");
+                            goto End;
+                        };
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Neither");
+                        goto End;
+                    }
+
+                }
+                Console.WriteLine("IPv4");
+                End:
+                continue;
+            }
+
+            return;
+        }
+
+        
+
+        public void IsIPV6Address(string[] lines)
+        {
+            var arr = new List<string>();
+            foreach (var line in lines)
+            {
+                arr = line.Split(':').ToList();
+                if (arr.Count != 8)
+                {
+                    Console.WriteLine("Neither");
+                    continue;
+                }
+
+                foreach (var s in arr)
+                {
+                    if (s.Length <= 0 || s.Length > 4)
+                    {
+                        Console.WriteLine("Neither");
+                        break;
+                    }
+                        
+                    foreach (var c in s)
+                    {
+                        if (!((c >= 'a' && c <= 'f')
+                            ||
+                            (c >= 'A' && c <= 'F')
+                            ||
+                            (char.IsDigit(c))))
+                        {
+                            Console.WriteLine("Neither");
+                            goto End;
+                        }
+                    }
+                }
+            Console.WriteLine("IPv6");
+
+            End:
+                continue;
+            }
+            return;
+        }
+
+
+        public bool CanJump(int[] nums)
+        {
+            // Reference to the max jump
+            int maxJump = 0;
+            // Reference to the array
+            int numsLength = nums.Length - 1;
+
+            //Check if maxJump is >= i, or if it is less than numsLength
+            //if maxJump is less than i, then it's impossible to move further down the array. 
+            //if maxJump is greater than numsLength, then we reached our goal. 
+            for (int i =0; maxJump >= i && maxJump < numsLength; i++)
+            {
+                // if index + nums[i] > maxJump, then we set max jump to that number. 
+                // This way we know it is possible to continue moving. 
+                if (i + nums[i] > maxJump)
+                {
+                    maxJump = i + nums[i]; 
+                }
+            }
+
+            //if max jump is greater than numsLength, then we reached the end. 
+            return maxJump >= numsLength; 
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

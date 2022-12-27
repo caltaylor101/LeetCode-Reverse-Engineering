@@ -14,15 +14,9 @@ ListNode node3 = new ListNode(5, node2);
 ListNode node4 = new ListNode(4, node3);
 
 
-engine.DeleteNode(node3);
+//Console.WriteLine(engine.IsIPV4Address(new string[] { "256.168.256.1" }));
 
-while (node4 != null)
-{
-    Console.WriteLine(node4.val);
-    node4 = node4.next;
-}
-
-
+Console.WriteLine(engine.CanJump(new int[] { 3, 2, 1, 0, 4 }));
 
 
 
